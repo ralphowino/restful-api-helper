@@ -13,13 +13,5 @@
         "dingo/api": "1.0.*@dev",
         "tymon/jwt-auth": "0.5.*",
         "barryvdh/laravel-cors": "^0.7.1"
-    },
-    "autoload": {
-        "classmap": [
-            "database"
-        ],
-        "psr-4": {
-            "Ralphowino\\ApiStarter\\": "packages/ralphowino/api-starter/src"
-        }
     }
 }
