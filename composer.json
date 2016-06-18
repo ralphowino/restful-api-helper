@@ -1,0 +1,25 @@
+{
+    "name": "ralphowino/api-starter",
+    "description": "This is a starter package for a laravel api using JWT authentication and the Dingo api package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Samuel Kubai",
+            "email": "sam@ralphowino.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "dingo/api": "1.0.*@dev",
+        "tymon/jwt-auth": "0.5.*",
+        "barryvdh/laravel-cors": "^0.7.1"
+    },
+    "autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "Ralphowino\\ApiStarter\\": "packages/ralphowino/api-starter/src"
+        }
+    }
+}
