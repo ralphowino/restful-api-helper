@@ -43,10 +43,13 @@ class MakeController extends Command
     {
         //Get the name for the controller
         $name = studly_case($this->argument('name'));
+        
         //Check if the controller should be plain
         $plain = $this->option('plain');
+        
         //Check if the controller should be repository
         $repository = $this->option('repository');
+        
         //Check if the controller should be transformer
         $transformer = $this->option('transformer');
 

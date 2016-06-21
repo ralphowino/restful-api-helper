@@ -46,17 +46,10 @@ class Initialization extends Command
 
         //Run the publishing of the starter package
         $this->info('Copying all the necessary starter files...');
-        $this->publishes([
-            $this->package_path('Controllers') => app_path('Http\\Controllers\\Api'),
-            $this->package_path('Data\\Models') => app_path('Data\\Models'),
-            $this->package_path('Data\\Repositories') => app_path('Data\\Repositories'),
-            $this->package_path('Templates\\init-middleware.php') => app_path('Http\\Kernel.php'),
-            $this->package_path('config\\view.php') => base_path('config\\view.php'),
-        ]);
+        $this->publishAllFiles();
 
         //Copy the BaseController content to existing Controller
-        $content = \File::get($this->package_path('Templates\\base-controller.php'));
-        $this->writeToBottomOfClass(app_path('Http\\Controllers\\Controller.php'), $content);
+        $this->addToBaseController();
 
         //Append the routes to the routes.php file
         $this->info('Adding the routes to the routes file...');
@@ -77,5 +70,33 @@ class Initialization extends Command
         $content = \File::get($this->package_path('Stubs\\routes.blade.php'));
         //Append to the routes.php file
         $this->addToFile('routes.php', 'routes', "\n\n" . $content);
+    }
+
+    /**
+     * Publish all the necessary files for the
+     * api starter package initialization
+     *
+     * @return void
+     */
+    public function publishAllFiles()
+    {
+        $this->publishes([
+            $this->package_path('Controllers') => app_path('Http\\Controllers\\Api'),
+            $this->package_path('Data\\Models') => app_path('Data\\Models'),
+            $this->package_path('Data\\Repositories') => app_path('Data\\Repositories'),
+            $this->package_path('Templates\\init-middleware.php') => app_path('Http\\Kernel.php'),
+            $this->package_path('config\\view.php') => base_path('config\\view.php'),
+        ]);
+    }
+
+    /**
+     * Add the BaseController content
+     *
+     * @return void
+     */
+    public function addToBaseController()
+    {
+        $content = \File::get($this->package_path('Templates\\base-controller.php'));
+        $this->writeToBottomOfClass(app_path('Http\\Controllers\\Controller.php'), $content);
     }
 }

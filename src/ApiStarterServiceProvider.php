@@ -4,18 +4,14 @@ namespace Ralphowino\ApiStarter;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
-use Ralphowino\ApiStarter\Console\Commands\MakeModel;
-use Ralphowino\ApiStarter\Console\Commands\InitOauth2;
 use Ralphowino\ApiStarter\Console\Commands\Initialization;
 use Ralphowino\ApiStarter\Console\Commands\MakeController;
 use Ralphowino\ApiStarter\Console\Commands\MakeTransformer;
-use Ralphowino\ApiStarter\Console\Traits\FileWizard;
-use Ralphowino\ApiStarter\Console\Traits\ProcessRunnerTrait;
+use Ralphowino\ApiStarter\Console\Commands\StarterModelCommand;
+use Ralphowino\ApiStarter\Console\Commands\StarterMigrationCommand;
 
 class ApiStarterServiceProvider extends ServiceProvider
 {
-    use ProcessRunnerTrait;
-
     /**
      * Bootstrap the application services.
      *
@@ -89,11 +85,11 @@ class ApiStarterServiceProvider extends ServiceProvider
     public function registerCommands()
     {
         $this->commands([
-            MakeModel::class,
-            InitOauth2::class,
             Initialization::class,
             MakeController::class,
             MakeTransformer::class,
+            StarterModelCommand::class,
+            StarterMigrationCommand::class,
         ]);
     }
 }
