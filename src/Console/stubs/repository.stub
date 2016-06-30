@@ -1,0 +1,27 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyModelNamespace\DummyModel;
+use DummyNamespace\Traits\ResourcefulTrait;
+
+class DummyModelPluralRepository extends BaseRepository
+{
+    use ResourcefulTrait;
+
+    /**
+     * This is the repository's model
+     *
+     * @var DummyModel
+     */
+    protected $model;
+
+    /**
+     * TasksRepository constructor.
+     * @param Task $task
+     */
+    function __construct(DummyModel $DummyModelCamel)
+    {
+        $this->model = $DummyModelCamel;
+    }
+}

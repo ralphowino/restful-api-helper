@@ -9,6 +9,7 @@ use Ralphowino\ApiStarter\Console\Commands\MakeTransformer;
 use Ralphowino\ApiStarter\Console\Commands\StarterModelCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterMigrationCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterControllerCommand;
+use Ralphowino\ApiStarter\Console\Commands\StarterRepositoryCommand;
 
 class ApiStarterServiceProvider extends ServiceProvider
 {
@@ -89,6 +90,7 @@ class ApiStarterServiceProvider extends ServiceProvider
             MakeTransformer::class,
             StarterModelCommand::class,
             StarterMigrationCommand::class,
+            StarterRepositoryCommand::class,
             StarterControllerCommand::class,
         ]);
     }

@@ -220,6 +220,7 @@ class StarterMigrationCommand extends Command
             ['name', InputArgument::REQUIRED, 'The name of the migration'],
         ];
     }
+    
     /**
      * Get the console command options.
      *
