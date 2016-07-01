@@ -2,6 +2,14 @@
 
 This is a starter package for a laravel api, using: Dingo api package, tymondesigns jwt authentication package and barryvdh laravel cors package. It's also using the Laravel 5.2 framework
 
+##Commands
+1. `starter:init`
+2. `starter:model`
+3. `starter:migration`
+4. `starter:controller`
+5. `starter:repository`
+6. `starter:transformer`
+
 ##Installation
 1. Add the package to the `packages/ralphowino` directory .
 2. Add `
