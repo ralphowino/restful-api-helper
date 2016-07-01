@@ -1,0 +1,33 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyModelNamespace\DummyModel;
+use League\Fractal\TransformerAbstract;
+
+class DummyClass extends TransformerAbstract
+{
+    /**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [DummyTransformerIncludes];
+
+    /**
+     * Turn this item object into a generic array
+     *
+     * @param DummyModel $DummyModelCamel
+     * @return array
+     */
+    public function transform(DummyModel $DummyModelCamel)
+    {
+        return [
+            'id' => $DummyModelCamel->id,
+            DummyTransformerFields
+            'created_at' => (String)$DummyModelCamel->created_at,
+            'updated_at' => (String)$DummyModelCamel->updated_at
+        ];
+    }
+    DummyTransformerIncludesMethods
+}

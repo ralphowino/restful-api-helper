@@ -1,0 +1,12 @@
+
+    /**
+     * Include DummyIncludeStudly
+     *
+     * @param DummyModelStudly $DummyModelCamel
+     * @return \League\Fractal\Resource\DummyType
+     */
+    public function includeDummyIncludeStudly(DummyModelStudly $DummyModelCamel)
+    {
+        $DummyIncludeCamel = $DummyModelCamel->DummyIncludeCamel;
+        return $this->DummyType($DummyIncludeCamel, new DummyIncludeSingleStudlyTransformer());
+    }

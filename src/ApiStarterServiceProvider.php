@@ -10,6 +10,7 @@ use Ralphowino\ApiStarter\Console\Commands\StarterModelCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterMigrationCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterControllerCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterRepositoryCommand;
+use Ralphowino\ApiStarter\Console\Commands\StarterTransformerCommand;
 
 class ApiStarterServiceProvider extends ServiceProvider
 {
@@ -87,11 +88,11 @@ class ApiStarterServiceProvider extends ServiceProvider
     {
         $this->commands([
             Initialization::class,
-            MakeTransformer::class,
             StarterModelCommand::class,
             StarterMigrationCommand::class,
             StarterRepositoryCommand::class,
             StarterControllerCommand::class,
+            StarterTransformerCommand::class,
         ]);
     }
 }
