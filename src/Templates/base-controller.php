@@ -1,11 +1,11 @@
-use Helpers;
+use \Dingo\Api\Routing\Helpers;
 
     /**
      * The controller's default status code
      *
      * @var int
      */
-    protected $statusCode = Response::HTTP_OK;
+    protected $statusCode = \Dingo\Api\Http\Response::HTTP_OK;
 
     /**
      * Validate the controller input
