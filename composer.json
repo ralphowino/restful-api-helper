@@ -10,10 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "dingo/api": "1.0.*@dev",
-        "tymon/jwt-auth": "*",
-        "barryvdh/laravel-cors": "*"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "psr-4": {
