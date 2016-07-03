@@ -44,6 +44,6 @@ trait DirectoryWizard
      */
     protected function package_path($path)
     {
-        return base_path('packages\\ralphowino\\api-starter\\src\\' . $path);
+        return __DIR__. '/../../'. $path;
     }
 }
