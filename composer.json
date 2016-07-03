@@ -11,9 +11,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "tymon/jwt-auth": "0.5.*",
-        "illuminate/support": "~5.0",
-        "barryvdh/laravel-cors": "^0.7.1"
+        "dingo/api": "*",
+        "tymon/jwt-auth": "*",
+        "barryvdh/laravel-cors": "*"
     },
     "autoload": {
         "psr-4": {
