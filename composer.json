@@ -3,6 +3,7 @@
     "description": "This is a starter package for a laravel api using JWT authentication and the Dingo api package",
     "keywords": ["laravel", "api", "starter"],
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Samuel Kubai",
