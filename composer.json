@@ -4,7 +4,7 @@
     "keywords": ["laravel", "api", "starter"],
     "license": "MIT",
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Samuel Kubai",
