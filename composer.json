@@ -1,6 +1,7 @@
 {
     "name": "kubai/api-starter",
     "description": "This is a starter package for a laravel api using JWT authentication and the Dingo api package",
+    "keywords": ["laravel", "api", "starter"],
     "license": "MIT",
     "authors": [
         {
@@ -8,12 +9,16 @@
             "email": "sam@ralphowino.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
         "dingo/api": "1.0.*@dev",
         "tymon/jwt-auth": "0.5.*",
         "illuminate/support": "~5.0",
         "barryvdh/laravel-cors": "^0.7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ralphowino\\ApiStarter\\": "src/"
+        }
     }
 }
