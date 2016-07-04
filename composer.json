@@ -1,5 +1,5 @@
 {
-    "name": "Ralphowino/api-starter",
+    "name": "Ralphowino/restful-api-starter",
     "description": "This is a starter package for a laravel api using JWT authentication and the Dingo api package",
     "keywords": ["laravel", "api", "starter"],
     "license": "MIT",
