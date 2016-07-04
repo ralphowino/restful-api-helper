@@ -12,7 +12,7 @@ This is a laravel package that helps you start of building a laravel api. It con
 ##Usage
 
 ###Step 1: Install the composer packages
-`composer require dingo/api:1.0.*@dev tymon/jwt-auth:0.5.* barryvdh/laravel-cors:^0.7.1 kubai/api-starter:dev-master`
+`composer require dingo/api:1.0.*@dev tymon/jwt-auth:0.5.* barryvdh/laravel-cors:^0.7.1 ralphowino/restful-api-helper:dev-master`
 
 ###Step 2: Add the Service Provider
 Add `Ralphowino\ApiStarter\ApiStarterServiceProvider::class` to the `config/app.php` 
