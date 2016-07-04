@@ -13,7 +13,7 @@
         "php": ">=5.4.0",
         "dingo/api": "dev-master",
         "tymon/jwt-auth": "0.5.*",
-        "barryvdh/laravel-cors": "^0.7.1"
+        "barryvdh/laravel-cors": "*"
     },
     "autoload": {
         "psr-4": {
