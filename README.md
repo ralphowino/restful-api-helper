@@ -2,11 +2,11 @@
 
 This is a laravel package that helps you start of building a laravel api. It contains useful command generators to generate various files for your api and is completely configurable. The generators include:
 * `starter:init`
-* `starter:model`
-* `starter:migration`
-* `starter:controller`
-* `starter:repository`
-* `starter:transformer`
+* `starter:model <name> --table[=TABLE] --archive --migration --schema[=SCHEMA]`
+* `starter:migration <name> --schema[=SCHEMA] --archive --model[=MODEL]`
+* `starter:controller <name> --plain` 
+* `starter:repository <name> --model`
+* `starter:transformer <name> --fields[=FIELDS] --includes[=INCLUDES]`
  
 
 ##Usage

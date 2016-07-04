@@ -38,9 +38,9 @@ trait FileWizard
                     $fileName = $file->getFilename();
 
                     if($file->getRelativePath() == "") {
-                        $this->copyFileTo($destination, $source . '\\' . $fileName);
+                        $this->copyFileTo($destination, $source . '/' . $fileName);
                     } else {
-                        $this->copyFileTo($destination . '\\' . $file->getRelativePath(), $source . '\\' . $file->getRelativePath() . '\\' . $fileName);
+                        $this->copyFileTo($destination . '/' . $file->getRelativePath(), $source . '/' . $file->getRelativePath() . '/' . $fileName);
                     }
                 }
                 return true;
@@ -64,7 +64,7 @@ trait FileWizard
         $directory = $this->findOrCreateDirectory($destination);
         
         if(is_dir($directory)) {
-            \File::put($directory . '\\' . basename($source), \File::get($source));
+            \File::put($directory . '/' . basename($source), \File::get($source));
             return true;
         }
         //
