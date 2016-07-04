@@ -12,18 +12,33 @@ This is a laravel package that helps you start of building a laravel api. It con
 ##Usage
 
 ###Step 1: Install the composer packages
-`composer require dingo/api:1.0.*@dev tymon/jwt-auth:0.5.* barryvdh/laravel-cors:^0.7.1 ralphowino/restful-api-helper:dev-master`
+
+Add this to your composer.json file
+```json
+"require": {
+	"dingo/api": "1.0.*@dev",
+	"tymon/jwt-auth": "0.5.*",
+	"barryvdh/laravel-cors":"^0.7.1",
+	"ralphowino/restful-api-helper":"dev-master"
+ }
+```
+
+Run `composer update` to install packages.
 
 ###Step 2: Add the Service Provider
+
 Add `Ralphowino\ApiStarter\ApiStarterServiceProvider::class` to the `config/app.php` 
 
 ###Step 3: Publish the packages configuration files
+
 Publish the package's assets by running `php artisan vendor:publish --provider="Ralphowino\ApiStarter\ApiStarterServiceProvider"`
 
 ###Step 4: Initialize the starter
+
 Initialize the project by running `php artisan starter:init`
 
 ###Step 5: Generate a new jwt token
+
 Generate a new jwt token for the application by running `php artisan jwt:generate`
 
 ###Commands
