@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        
+
         "dingo/api": "dev-master",
         "tymon/jwt-auth": "0.5.*",
         "barryvdh/laravel-cors": "*"
@@ -21,6 +21,7 @@
             "Ralphowino\\ApiStarter\\": "src/"
         }
     },
+    
     "minimum-stability": "dev",
     "prefer-stable": true
 }
