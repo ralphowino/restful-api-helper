@@ -13,17 +13,7 @@ This is a laravel package that helps you start of building a laravel api. It con
 
 ###Step 1: Install the composer packages
 
-Add this to your composer.json file
-```json
-"require": {
-	"dingo/api": "1.0.*@dev",
-	"tymon/jwt-auth": "0.5.*",
-	"barryvdh/laravel-cors":"^0.7.1",
-	"ralphowino/restful-api-helper":"dev-master"
- }
-```
-
-Run `composer update` to install packages.
+Run `composer require ralphowino/restful-api-helper dev-master` to install the package.
 
 ###Step 2: Add the Service Provider
 
