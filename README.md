@@ -284,7 +284,7 @@ This command creates a transformer for the application, the transformer is saved
 * `--includes` - This are the includes for the transformer
 
 #####Example
-`php artisan starter:transformer Task --fields="name,slug" --includes="user:item, comments:collection"`
+`php artisan starter:transformer Task --fields="name,slug" --includes="user:item, comments:collection, goal, elements"`
 
 
 For the fields format a comma seperated list is expected
@@ -314,7 +314,8 @@ class TaskTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = ['user','comments'];
+    protected $availableIncludes = ['user','comments','goal','elements
+'];
 
     /**
      * Turn this item object into a generic array
@@ -356,8 +357,32 @@ class TaskTransformer extends TransformerAbstract
         $comments = $task->comments;
         return $this->collection($comments, new CommentTransformer());
     }
-}
 
+    /**
+     * Include Goal
+     *
+     * @param Task $task
+     * @return \League\Fractal\Resource\item
+     */
+    public function includeGoal(Task $task)
+    {
+        $goal = $task->goal;
+        return $this->item($goal, new GoalTransformer());
+    }
+
+    /**
+     * Include Elements
+
+     *
+     * @param Task $task
+     * @return \League\Fractal\Resource\collection
+     */
+    public function includeElements(Task $task)
+    {
+        $elements = $task->elements;
+        return $this->collection($elements, new ElementTransformer());
+    }
+}
 ```
 
 ##Configuration
