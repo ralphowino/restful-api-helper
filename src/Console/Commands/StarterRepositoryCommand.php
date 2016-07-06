@@ -3,11 +3,14 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class StarterRepositoryCommand extends GeneratorCommand
 {
+    use GeneratorCommandTrait;
+
     /**
      * The console command name.
      *
@@ -63,7 +66,7 @@ class StarterRepositoryCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace. '\\' .config('starter.repository.path');
+        return $this->getConfiguredNamespace($rootNamespace, strtolower($this->type));
     }
 
     /**
@@ -78,7 +81,10 @@ class StarterRepositoryCommand extends GeneratorCommand
     {
         $stub = parent::buildClass($name);
 
-        return $this->addModelNamespace($stub)->addModelName($stub);
+        return $this->addExtendClass($stub, strtolower($this->type))
+                    ->addTraitNamespace($stub)
+                    ->addModelNamespace($stub)
+                    ->addModelName($stub);
     }
 
     /**
@@ -143,6 +149,23 @@ class StarterRepositoryCommand extends GeneratorCommand
         );
 
         return $stub;
+    }
+
+    /**
+     * Add the trait's namespace to the repository
+     *
+     * @param $stub
+     * @return $this
+     */
+    protected function addTraitNamespace(&$stub)
+    {
+        $stub = str_replace(
+            'DummyTraitNamespace',
+            $this->getConfiguredNamespace(trim($this->laravel->getNamespace(), '\\'), 'repository.trait'),
+            $stub
+        );
+
+        return $this;
     }
 
     /**

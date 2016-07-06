@@ -3,6 +3,7 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Ralphowino\ApiStarter\Console\Transformers\FieldsParser;
@@ -12,6 +13,8 @@ use Ralphowino\ApiStarter\Console\Transformers\IncludesParser;
 
 class StarterTransformerCommand extends GeneratorCommand
 {
+    use GeneratorCommandTrait;
+
     /**
      * The console command name.
      *
@@ -52,7 +55,7 @@ class StarterTransformerCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace. '\\' .config('starter.transformer.path');
+        return $this->getConfiguredNamespace($rootNamespace, 'transformer');
     }
 
     /**

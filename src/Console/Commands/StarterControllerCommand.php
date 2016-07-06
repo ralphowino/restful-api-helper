@@ -3,11 +3,14 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 class StarterControllerCommand extends GeneratorCommand
 {
+    use GeneratorCommandTrait;
+
     /**
      * The console command name.
      *
@@ -73,7 +76,7 @@ class StarterControllerCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Controllers\Api';
+        return $this->getConfiguredNamespace($rootNamespace, strtolower($this->type));
     }
 
     /**
@@ -103,7 +106,8 @@ class StarterControllerCommand extends GeneratorCommand
     {
         $stub = parent::buildClass($name);
 
-        return $this->addStoreMethod($stub)
+        return $this->addExtendClass($stub, strtolower($this->type))
+                    ->addStoreMethod($stub)
                     ->addIndexMethod($stub)
                     ->addShowMethod($stub)
                     ->addUpdateMethod($stub)

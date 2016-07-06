@@ -63,11 +63,31 @@ class IncludesParser
      */
     private function parseSegments($field)
     {
-        $segments = explode(':', $field);
+        if(str_contains($field, ':')) {
+            $segments = explode(':', $field);
 
-        $name = array_shift($segments);
-        $type = array_shift($segments);
+            $name = array_shift($segments);
+            $type = array_shift($segments);
+        } else {
+            $name = $field;
+            $type = $this->determineFieldType($name);
+        }
 
         return compact('name', 'type');
+    }
+
+    /**
+     * Determine the field type for the transformer includes
+     *
+     * @param $name
+     * @return string
+     */
+    protected function determineFieldType($name)
+    {
+        if (str_plural($name) == $name) {
+            return 'collection';
+        } else {
+            return 'item';
+        }
     }
 }

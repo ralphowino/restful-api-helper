@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use DummyNamespace\BaseModel;
 DummyArchiveUse
-class DummyClass extends BaseModel
+DummyBaseClassImport
+class DummyClass extends DummyBaseClass
 {
     DummyArchive
     /**

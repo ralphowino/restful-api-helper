@@ -4,11 +4,14 @@ namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 use Ralphowino\ApiStarter\Console\Traits\ModelTrait;
 use Symfony\Component\Console\Input\InputOption;
 
 class StarterModelCommand extends GeneratorCommand
 {
+    use GeneratorCommandTrait;
+
     /**
      * The console command name.
      *
@@ -29,6 +32,27 @@ class StarterModelCommand extends GeneratorCommand
      * @var string
      */
     protected $type = 'Model';
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return __DIR__.'/../stubs/model.stub';
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $this->getConfiguredNamespace($rootNamespace, strtolower($this->type));
+    }
 
     /**
      * Execute the console command.
@@ -53,8 +77,6 @@ class StarterModelCommand extends GeneratorCommand
         }
     }
 
-
-
     /**
      * Build the class with the given name.
      *
@@ -66,6 +88,7 @@ class StarterModelCommand extends GeneratorCommand
         $stub = $this->files->get($this->getStub());
 
         return $this
+            ->addExtendClass($stub, strtolower($this->type))
             ->replaceNamespace($stub, $name)
             ->replaceTable($stub, $this->getTableInput())
             ->replaceArchive($stub, $this->getArchiveInput())
@@ -122,23 +145,13 @@ class StarterModelCommand extends GeneratorCommand
     }
 
     /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        return __DIR__.'/../stubs/model.stub';
-    }
-
-    /**
      * Get the desired class name from the input.
      *
      * @return string
      */
     protected function getNameInput()
     {
-        return config('starter.model.path') . '\\' . trim($this->argument('name'));
+        return trim($this->argument('name'));
     }
 
     /**

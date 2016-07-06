@@ -3,9 +3,9 @@
 namespace DummyNamespace;
 
 use DummyModelNamespace\DummyModel;
-use DummyNamespace\Traits\ResourcefulTrait;
-
-class DummyModelPluralRepository extends BaseRepository
+use DummyTraitNamespace\Traits\ResourcefulTrait;
+DummyBaseClassImport
+class DummyModelPluralRepository extends DummyBaseClass
 {
     use ResourcefulTrait;
 

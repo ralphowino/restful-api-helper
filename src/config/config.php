@@ -1,65 +1,34 @@
 <?php
 
 return [
-    'requests' => [
-        'prefix' => '',
-        'suffix' => '',
-        'path' => 'Http\\Requests'
-    ],
-
     'migration' => [
-        'prefix' => '',
-        'suffix' => '',
         'path' => 'database\\migrations'
     ],
 
     'model' => [
-        'prefix' => '',
-        'suffix' => '',
-        'path' => 'Data\\Models'
-    ],
+        'path' => 'Data\\Models',
+        'extends' => 'Data\\Models\\Model'
 
-    'transformer' => [
-        'prefix' => '',
-        'suffix' => 'Transformer',
-        'path' => 'Http\\Transformers'
     ],
 
     'controller' => [
-        'prefix' => '',
-        'suffix' => '',
-        'path' => 'Http\\Controllers\\Api'
+        'path' => 'Http\\Controllers',
+        'extends' => 'Http\\Controllers\\Controller'
     ],
 
     'repository' => [
-        'prefix' => '',
-        'suffix' => '',
-        'path' => 'Data\\Repositories'
+        'trait' => [
+            'path' => 'Data\\Repositories'
+        ],
+        'path' => 'Data\\Repositories',
+        'extends' => 'Data\\Repositories\\BaseRepository'
+    ],
+
+    'transformer' => [
+        'path' => 'Http\\Transformers'
     ],
 
     'routes' => [
-        'prefix' => '',
-        'suffix' => '',
         'path' => 'Http'
-    ],
-
-    'oauth' => [
-        'controller' => [
-            'prefix' => '',
-            'suffix' => '',
-            'path' => 'Http\\Controllers\\Oauth'
-        ],
-
-        'view' => [
-            'prefix' => '',
-            'suffix' => '',
-            'path' => '..\\resources\\views\\oauth'
-        ],
-
-        'seeder' => [
-            'prefix' => '',
-            'suffix' => '',
-            'path' => '..\\database\\seeds'
-        ]
     ],
 ];
