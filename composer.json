@@ -11,10 +11,6 @@
     ],
     "require": {
         "php": ">=5.4.0",
-
-        "dingo/api": "dev-master",
-        "tymon/jwt-auth": "0.5.*",
-        "barryvdh/laravel-cors": "*"
     },
     "require-dev": {
         "phpspec/phpspec": "~2.1"
@@ -29,6 +25,7 @@
             "dev-master": "1.0.x-dev"
         }
     },
+
     "minimum-stability": "dev",
     "prefer-stable": true
 }
