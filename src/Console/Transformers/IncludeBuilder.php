@@ -48,7 +48,7 @@ class IncludeBuilder
         }, $includes);
 
 
-        return implode("\r\n", $includeMethods);
+        return implode("\n", $includeMethods);
     }
 
     /**

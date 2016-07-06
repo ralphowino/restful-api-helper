@@ -38,6 +38,6 @@ class FieldsBuilder
             }, $fields);
         }
 
-        return implode("\r\n" . str_repeat(' ', 12), $fieldsArray);
+        return implode("\n" . str_repeat(' ', 12), $fieldsArray);
     }
 }
