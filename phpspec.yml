@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: Ralphowino\ApiStarter
+        psr4_prefix: Ralphowino\ApiStarter
+        src_path: src

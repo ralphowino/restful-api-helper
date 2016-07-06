@@ -16,6 +16,9 @@
         "tymon/jwt-auth": "0.5.*",
         "barryvdh/laravel-cors": "*"
     },
+    "require-dev": {
+        "phpspec/phpspec": "~2.1"
+    },
     "autoload": {
         "psr-4": {
             "Ralphowino\\ApiStarter\\": "src/"
