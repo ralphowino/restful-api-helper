@@ -67,7 +67,7 @@ class Initialization extends Command
     public function addRoutes()
     {
         //Get the routes template content
-        $content = \File::get($this->package_path('Stubs/routes.blade.php'));
+        $content = \File::get($this->package_path('Templates/routes.php'));
         //Append to the routes.php file
         $this->addToFile('routes.php', 'routes', "\n\n" . $content);
     }
