@@ -18,6 +18,7 @@ class FieldsBuilder
         return $fields;
     }
 
+
     /**
      * Construct the transformer fields.
      *
@@ -37,6 +38,6 @@ class FieldsBuilder
             }, $fields);
         }
 
-        return implode("\n" . str_repeat(' ', 12), $fieldsArray);
+        return implode("\r\n" . str_repeat(' ', 12), $fieldsArray);
     }
 }

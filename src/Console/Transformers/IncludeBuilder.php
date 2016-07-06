@@ -15,7 +15,7 @@ class IncludeBuilder
     {
         $DummyTransformerIncludes = $this->createTransformerIncludes($includes);
         $DummyTransformerIncludesMethods = $this->createTransformerIncludesMethods($includes, $model);
-
+        //dd($DummyTransformerIncludesMethods);
         return compact('DummyTransformerIncludesMethods', 'DummyTransformerIncludes');
     }
 
@@ -47,7 +47,8 @@ class IncludeBuilder
             return $this->constructMethod($include['name'], $include['type'], $model);
         }, $includes);
 
-        return implode("\n", $includeMethods);
+
+        return implode("\r\n", $includeMethods);
     }
 
     /**
