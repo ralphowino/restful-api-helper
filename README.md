@@ -15,7 +15,17 @@ This is a laravel package that helps you start of building a laravel api. It con
 
 ###Step 1: Install the composer packages
 
-Run `composer require ralphowino/restful-api-helper dev-master`.
+Add
+```json
+{
+   ....
+   "minimum-stability" : "dev",
+   "prefer-stable" : true
+}
+```
+to your composer.json file.
+
+Run `composer require ralphowino/restful-api-helper 1.0.x-dev`.
 
 ###Step 2: Add the Service Provider
 
