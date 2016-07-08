@@ -4,6 +4,8 @@ namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Ralphowino\ApiStarter\Console\Models\RelationsBuilder;
+use Ralphowino\ApiStarter\Console\Models\RelationsParser;
 use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 use Ralphowino\ApiStarter\Console\Traits\ModelTrait;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,13 +42,13 @@ class StarterModelCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/../stubs/model.stub';
+        return __DIR__ . '/../stubs/model.stub';
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param  string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
@@ -68,7 +70,7 @@ class StarterModelCommand extends GeneratorCommand
                 $migrationVariables = ['name' => "create_{$table}_table", '--schema' => $this->getSchemaInput()];
 
                 //Check if the model is to be archived
-                if($this->getArchiveInput()) {
+                if ($this->getArchiveInput()) {
                     $migrationVariables['--archive'] = true;
                 }
 
@@ -80,7 +82,7 @@ class StarterModelCommand extends GeneratorCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return string
      */
     protected function buildClass($name)
@@ -88,6 +90,7 @@ class StarterModelCommand extends GeneratorCommand
         $stub = $this->files->get($this->getStub());
 
         return $this
+            ->addRelationships($stub)
             ->addExtendClass($stub, strtolower($this->type))
             ->replaceNamespace($stub, $name)
             ->replaceTable($stub, $this->getTableInput())
@@ -120,7 +123,7 @@ class StarterModelCommand extends GeneratorCommand
      */
     private function replaceArchive(&$stub, $archive)
     {
-        if($archive) {
+        if ($archive) {
             $stub = str_replace(
                 "DummyArchiveUse", "use Illuminate\\Database\\Eloquent\\SoftDeletes;\n", $stub
             );
@@ -145,6 +148,29 @@ class StarterModelCommand extends GeneratorCommand
     }
 
     /**
+     * Add the model's relationships
+     *
+     * @param $stub
+     * @return mixed
+     */
+    protected function addRelationships(&$stub)
+    {
+        $builtRelationships = '';
+
+        if ($relationships = $this->option('relationships')) {
+            $parsedRelationships = (new RelationsParser())->parse($relationships);
+            $builtRelationships = (new RelationsBuilder())->create($parsedRelationships);
+        }
+
+        $stub = str_replace(
+            'DummyRelationships', $builtRelationships, $stub
+        );
+
+
+        return $this;
+    }
+
+    /**
      * Get the desired class name from the input.
      *
      * @return string
@@ -161,7 +187,7 @@ class StarterModelCommand extends GeneratorCommand
      */
     private function getTableInput()
     {
-        if(!is_null($name = $this->option('table'))) {
+        if (!is_null($name = $this->option('table'))) {
             return trim($this->option('table'));
         }
 
@@ -200,6 +226,7 @@ class StarterModelCommand extends GeneratorCommand
             ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model.'],
             ['schema', null, InputOption::VALUE_OPTIONAL, 'The fields of the model to create.'],
             ['table', null, InputOption::VALUE_OPTIONAL, 'Assigns the model a specific table for it.'],
+            ['relationships', null, InputOption::VALUE_OPTIONAL, 'The model\'s relationship.'],
         ];
     }
 }

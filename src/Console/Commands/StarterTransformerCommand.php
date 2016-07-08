@@ -162,6 +162,7 @@ class StarterTransformerCommand extends GeneratorCommand
     }
 
     /**
+     * Add the transformer's includes
      *
      * @param $stub
      * @return mixed

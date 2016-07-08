@@ -4,7 +4,7 @@
 
 This is a laravel package that helps you start of building a laravel api. It contains useful command generators to generate various files for your api and is completely configurable. The generators include:
 * `starter:init`
-* `starter:model <name> --archive --migration --table[=TABLE] --schema[=SCHEMA]`
+* `starter:model <name> --archive --migration --table[=TABLE] --schema[=SCHEMA] --relationships[=RELATIONSHIPS]`
 * `starter:migration <name> --archive --schema[=SCHEMA] --model[=MODEL]`
 * `starter:controller <name> --plain` 
 * `starter:repository <name> --model`
@@ -65,9 +65,10 @@ configurable from the starter.php config file and saves the model to the set out
 * `--migration` - This option generates a migration along with the model being created
 * `--schema` - This option sets the fields for the model and if a migration is to be created adds the fields to the migration
 * `--table` - This option is used to explicitly set the table name for the model
+* `--relationships` - This option is used to set the relationships for the model
 
 #####Example
-`php artisan starter:model Task --schema="title:string priority:string:nullable" --archive`
+`php artisan starter:model Task --schema="title:string priority:string:nullable" --archive --relationships="user:belongsTo, goals:hasMany"`
 
 The appropriate format for the schema is:
 
@@ -80,8 +81,8 @@ The appropriate format for the schema is:
 
 namespace App\Data\Models;
 
-use App\Data\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Task extends BaseModel
 {
@@ -98,6 +99,26 @@ class Task extends BaseModel
      * @var array
      */
     protected $fillable = [];
+    
+    /**
+     * Links to it's user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+     public function user()
+     {
+        return $this->belongsTo(User::class);
+     }
+
+    /**
+     * Links to it's goals
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+     public function goals()
+     {
+        return $this->hasMany(Goal::class);
+     }
 }
 ```
 

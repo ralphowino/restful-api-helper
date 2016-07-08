@@ -1,0 +1,10 @@
+
+    /**
+     * Links to it's DummyMethod
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\DummyRelationshipStudly
+     */
+     public function DummyMethod()
+     {
+        return $this->DummyRelationship(DummyRelationshipArguments);
+     }
