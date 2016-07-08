@@ -18,7 +18,6 @@ This is a laravel package that helps you start of building a laravel api. It con
 Add
 ```json
 {
-   ....
    "minimum-stability" : "dev",
    "prefer-stable" : true
 }
