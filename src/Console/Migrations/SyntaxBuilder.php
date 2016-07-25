@@ -21,8 +21,8 @@ class SyntaxBuilder
     /**
      * Create the PHP syntax for the given schema.
      *
-     * @param  array $schema
-     * @param  array $meta
+     * @param array $schema
+     * @param array $meta
      * @param bool $archives
      * @return string
      * @throws \Exception
@@ -135,7 +135,7 @@ class SyntaxBuilder
      */
     private function getCreateSchemaWrapper()
     {
-        return file_get_contents(file_exists(base_path('templates/schema-create.stub')) ? base_path('templates/schema-create.stub') : __DIR__ . '/../stubs/schema-create.stub');
+        return file_get_contents(file_exists('./templates/schema-create.stub') ? './templates/schema-create.stub' : __DIR__ . '/../stubs/schema-create.stub');
     }
 
     /**
@@ -145,7 +145,7 @@ class SyntaxBuilder
      */
     private function getChangeSchemaWrapper()
     {
-        return file_get_contents(file_exists(base_path('templates/schema-change.stub')) ? base_path('templates/schema-change.stub') : __DIR__ . '/../stubs/schema-change.stub');
+        return file_get_contents(file_exists('./templates/schema-change.stub') ? './templates/schema-change.stub' : __DIR__ . '/../stubs/schema-change.stub');
     }
 
     /**

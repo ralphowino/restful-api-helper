@@ -60,7 +60,7 @@ class IncludeBuilder
      */
     private function constructMethod($include, $type, $model)
     {
-        $stub = file_get_contents(file_exists(base_path('templates/partials/includeMethod.stub')) ? base_path('templates/partials/includeMethod.stub') : __DIR__ . '/../stubs/partials/includeMethod.stub');
+        $stub = file_get_contents(file_exists('./templates/partials/includeMethod.stub') ? './templates/partials/includeMethod.stub' : __DIR__ . '/../stubs/partials/includeMethod.stub');
 
         return $this->addInclude($stub, $include)->addModel($stub, $model)->addType($stub, $type);
     }
