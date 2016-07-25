@@ -143,7 +143,7 @@ class StarterMigrationCommand extends Command
      */
     protected function compileMigrationStub()
     {
-        $stub = $this->files->get(__DIR__ . '/../stubs/migration.stub');
+        $stub = $this->files->get((file_exists(base_path('templates/migration.stub'))) ? base_path('templates/migration.stub') : __DIR__ . '/../stubs/migration.stub');
         $this->replaceClassName($stub)
             ->replaceSchema($stub)
             ->replaceTableName($stub);

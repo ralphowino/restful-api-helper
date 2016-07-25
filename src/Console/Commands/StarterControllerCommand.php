@@ -47,10 +47,10 @@ class StarterControllerCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('plain')) {
-            return __DIR__.'/../stubs/controller.plain.stub';
+            return (file_exists(base_path('templates/controller.plain.stub'))) ? base_path('templates/controller.plain.stub') : __DIR__.'/../stubs/controller.plain.stub';
         }
 
-        return __DIR__.'/../stubs/controller.stub';
+        return (file_exists(base_path('templates/controller.stub'))) ? base_path('templates/controller.stub') : __DIR__.'/../stubs/controller.stub';
     }
 
     /**
@@ -62,7 +62,7 @@ class StarterControllerCommand extends GeneratorCommand
     protected function getPartial($name)
     {
         if(in_array('all', $this->fields) || in_array($name, $this->fields)){
-            return $this->files->get(__DIR__.'/../stubs/partials/'.$name .'.stub');
+            return $this->files->get((file_exists(base_path('templates/partials/'. $name .'.stub'))) ? base_path('templates/partials/'. $name .'.stub') : __DIR__.'/../stubs/partials/'. $name .'.stub');
         }
 
         return '';

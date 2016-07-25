@@ -5,7 +5,6 @@ namespace Ralphowino\ApiStarter;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Ralphowino\ApiStarter\Console\Commands\Initialization;
-use Ralphowino\ApiStarter\Console\Commands\MakeTransformer;
 use Ralphowino\ApiStarter\Console\Commands\StarterModelCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterMigrationCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterControllerCommand;
@@ -28,6 +27,10 @@ class ApiStarterServiceProvider extends ServiceProvider
             __DIR__ . '/config/cors.php' => base_path('config/cors.php'),
             __DIR__ . '/config/config.php' => base_path('config/starter.php'),
         ], 'config');
+
+        $this->publishes([
+            __DIR__ . '/Console/stubs' => base_path('templates')
+        ], 'stubs');
 
         //Register the aliases
         $this->registerFacades();

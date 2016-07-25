@@ -13,7 +13,6 @@ class RelationsBuilder
      */
     public function create($relations)
     {
-        //dd($this->createRelationshipsMethods($relations));
         return $this->createRelationshipsMethods($relations);
     }
 
@@ -42,7 +41,7 @@ class RelationsBuilder
      */
     private function constructMethod($name, $relation)
     {
-        $stub = file_get_contents(__DIR__ . '/../stubs/partials/relationshipMethod.stub');
+        $stub = file_get_contents(file_exists(base_path('templates/partials/relationshipMethod.stub')) ? base_path('templates/partials/relationshipMethod.stub') : __DIR__ . '/../stubs/partials/relationshipMethod.stub');
 
         return $this->addArguments($stub, $name, $relation)->addRelationship($stub, $relation)->addMethodName($stub, $name);
     }

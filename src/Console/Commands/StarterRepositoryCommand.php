@@ -41,7 +41,6 @@ class StarterRepositoryCommand extends GeneratorCommand
     {
         if (parent::fire() !== false) {
             if ($this->option('model')) {
-
                 $this->call('starter:model', ['name' =>$this->getModelInput()]);
             }
         }
@@ -54,7 +53,7 @@ class StarterRepositoryCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/../stubs/repository.stub';
+        return file_exists(base_path('templates/repository.stub')) ? base_path('templates/repository.stub') : __DIR__.'/../stubs/repository.stub';
     }
 
 

@@ -42,7 +42,7 @@ class StarterModelCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/../stubs/model.stub';
+        return (file_exists(base_path('templates/model.stub'))) ? base_path('templates/model.stub') : __DIR__ . '/../stubs/model.stub';
     }
 
     /**

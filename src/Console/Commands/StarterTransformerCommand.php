@@ -43,7 +43,7 @@ class StarterTransformerCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/../stubs/transformer.stub';
+        return file_exists(base_path('templates/transformer.stub')) ? base_path('templates/transformer.stub') : __DIR__.'/../stubs/transformer.stub';
     }
 
 
