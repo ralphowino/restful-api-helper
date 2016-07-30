@@ -18,7 +18,7 @@ return [
 
     'repository' => [
         'trait' => [
-            'path' => 'Data\\Repositories'
+            'path' => 'Data\\Repositories\\Traits'
         ],
         'path' => 'Data\\Repositories',
         'extends' => 'Data\\Repositories\\BaseRepository'
@@ -30,5 +30,5 @@ return [
 
     'routes' => [
         'path' => 'Http'
-    ],
+    ]
 ];

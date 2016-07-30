@@ -3,6 +3,7 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\Command;
+use Ralphowino\ApiStarter\Console\Initialization\Configurer;
 use Ralphowino\ApiStarter\Console\Traits\FileWizard;
 use Ralphowino\ApiStarter\Console\Traits\BuildClassTrait;
 use Ralphowino\ApiStarter\Console\Traits\ProcessRunnerTrait;
@@ -41,7 +42,17 @@ class Initialization extends Command
      */
     public function fire()
     {
-        //Provide user with message once the publishing has began
+        // Check if the starter has already been initialized
+        if(!file_exists('./config/starter.php')) {
+            $this->info('You need to run vendor publish for the package first.');
+            return true;
+        }
+
+        //Configure the application defaults
+        $this->info('Configure the application defaults');
+        $this->configurePaths();
+
+        // Provide user with message once the publishing has began
         $this->info('Initializing the stater package....');
 
         //Run the publishing of the starter package
@@ -81,9 +92,9 @@ class Initialization extends Command
     public function publishAllFiles()
     {
         $this->publishes([
-            $this->package_path('Controllers') => app_path('Http/Controllers/Api'),
-            $this->package_path('Data/Models') => app_path('Data/Models'),
-            $this->package_path('Data/Repositories') => app_path('Data/Repositories'),
+            $this->package_path('Controllers') => app_path(config('starter.controller.path')),
+            $this->package_path('Data/Models') => app_path(config('starter.model.path')),
+            $this->package_path('Data/Repositories') => app_path(config('starter.repository.path')),
             $this->package_path('Templates/init-middleware.php') => app_path('Http/Kernel.php'),
             $this->package_path('config/view.php') => base_path('config/view.php'),
         ]);
@@ -98,5 +109,34 @@ class Initialization extends Command
     {
         $content = \File::get($this->package_path('Templates/base-controller.php'));
         $this->writeToBottomOfClass(app_path('Http/Controllers/Controller.php'), $content);
+    }
+
+    /**
+     * Configure the paths for the generated files.
+     *
+     * @return void
+     */
+    public function configurePaths()
+    {
+        $configurer = new Configurer($this, [
+            'models_path' => [
+                'question' => 'Where do you wish to save the models?',
+                'default' => config('starter.model.path')
+            ],
+            'controllers_path' => [
+                'question' => 'Where do you wish to save the controllers?',
+                'default' => config('starter.controller.path')
+            ],
+            'repositories_path' => [
+                'question' => 'Where do you wish to save the repositories?',
+                'default' => config('starter.repository.path')
+            ],
+            'transformers_path' => [
+                'question' => 'Where do you wish to save the transformers?',
+                'default' => config('starter.transformer.path')
+            ]
+        ]);
+        $configurer->run();
+        $configurer->save();
     }
 }
