@@ -6,6 +6,7 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Ralphowino\ApiStarter\Console\Commands\Initialization;
 use Ralphowino\ApiStarter\Console\Commands\StarterModelCommand;
+use Ralphowino\ApiStarter\Console\Commands\StarterResourceCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterMigrationCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterControllerCommand;
 use Ralphowino\ApiStarter\Console\Commands\StarterRepositoryCommand;
@@ -92,6 +93,7 @@ class ApiStarterServiceProvider extends ServiceProvider
         $this->commands([
             Initialization::class,
             StarterModelCommand::class,
+            StarterResourceCommand::class,
             StarterMigrationCommand::class,
             StarterRepositoryCommand::class,
             StarterControllerCommand::class,

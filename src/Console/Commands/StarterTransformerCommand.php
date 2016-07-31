@@ -207,7 +207,13 @@ class StarterTransformerCommand extends GeneratorCommand
      */
     protected function getModelInput()
     {
-        return trim($this->argument('name'));
+        preg_match('/(.+)[Tt]ransformers?$/i', trim($name  = $this->argument('name')), $matches);
+
+        if(count($matches) != 0) {
+            return studly_case(strtolower(trim($matches[1])));
+        }
+
+        return studly_case(strtolower(trim($name)));
     }
 
     /**
@@ -217,6 +223,6 @@ class StarterTransformerCommand extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        return studly_case(trim($this->argument('name'))) . 'Transformer';
+        return studly_case($this->getModelInput()) . 'Transformer';
     }
 }

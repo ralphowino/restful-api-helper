@@ -201,7 +201,7 @@ class StarterModelCommand extends GeneratorCommand
      */
     private function getArchiveInput()
     {
-        return boolval($this->option('archive'));
+        return boolval($this->option('soft-deletes'));
     }
 
     /**
@@ -222,11 +222,11 @@ class StarterModelCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['archive', 'a', InputOption::VALUE_NONE, 'Adds soft delete to the model being created.'],
-            ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model.'],
-            ['schema', null, InputOption::VALUE_OPTIONAL, 'The fields of the model to create.'],
-            ['table', null, InputOption::VALUE_OPTIONAL, 'Assigns the model a specific table for it.'],
             ['relationships', null, InputOption::VALUE_OPTIONAL, 'The model\'s relationship.'],
+            ['schema', null, InputOption::VALUE_OPTIONAL, 'The fields of the model to create.'],
+            ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model.'],
+            ['table', null, InputOption::VALUE_OPTIONAL, 'Assigns the model a specific table for it.'],
+            ['soft-deletes', 'a', InputOption::VALUE_NONE, 'Adds soft delete to the model being created.'],
         ];
     }
 }

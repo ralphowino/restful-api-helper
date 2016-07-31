@@ -17,8 +17,9 @@ class DummyModelPluralRepository extends DummyBaseClass
     protected $model;
 
     /**
-     * TasksRepository constructor.
-     * @param Task $task
+     * DummyModelPluralRepository constructor
+
+     * @param DummyModel $DummyModelCamel
      */
     function __construct(DummyModel $DummyModelCamel)
     {

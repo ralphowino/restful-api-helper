@@ -184,7 +184,13 @@ class StarterRepositoryCommand extends GeneratorCommand
      */
     protected function getModelInput()
     {
-        return trim($this->argument('name'));
+        preg_match('/(.+)[Rr]epositor(?:ies|ys?)$/i', trim($name  = $this->argument('name')), $matches);
+
+        if(count($matches) != 0) {
+            return studly_case(strtolower(trim($matches[1])));
+        }
+
+        return studly_case(strtolower(trim($name)));
     }
 
     /**
@@ -194,6 +200,6 @@ class StarterRepositoryCommand extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        return studly_case(str_plural(trim($this->argument('name')))) . 'Repository';
+        return studly_case($this->getModelInput()) . 'Repository';
     }
 }
