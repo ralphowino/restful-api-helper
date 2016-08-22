@@ -92,6 +92,8 @@ class StarterControllerCommand extends GeneratorCommand
             $this->fields = array_intersect($possible_methods, explode(",", $this->option('only')));
         } elseif ($this->option('except')) {
             $this->fields = array_diff($possible_methods, explode(",", $this->option('except')));
+        } elseif ($this->option('resourceful')) {
+            $this->fields = $possible_methods;
         } elseif (!$this->option('plain')) {
             $fields = array_merge(['all'], $possible_methods);
             $this->fields = $this->choice('Select the methods you want in your controller', $fields, 0, null, true);
@@ -141,8 +143,9 @@ class StarterControllerCommand extends GeneratorCommand
     {
         return array(
             array('plain', '-p', InputOption::VALUE_NONE, 'Create a plain controller'),
-            array('except', null, InputOption::VALUE_OPTIONAL, 'Create controller without this methods'),
+            array('resourceful', '-r', InputOption::VALUE_NONE, 'Create a resourceful controller'),
             array('only', null, InputOption::VALUE_OPTIONAL, 'Create controller with only this methods'),
+            array('except', null, InputOption::VALUE_OPTIONAL, 'Create controller without this methods')
         );
     }
 
