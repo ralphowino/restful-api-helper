@@ -73,6 +73,7 @@ class Configurer
 
         foreach ($this->fields as $configuration => $value) {
             $config_content = str_replace(str_replace('\\', '\\\\', $value['default']), str_replace('\\', '\\\\', $this->configurations[$configuration]), $config_content);
+            config([$value['config'] => str_replace('\\', '\\\\', $this->configurations[$configuration])]); //Reset the config value
         }
 
         file_put_contents($this->config_path, $config_content);

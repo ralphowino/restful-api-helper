@@ -52,7 +52,7 @@ class Initialization extends Command
         $this->info('Configure the application defaults');
         $this->configurePaths();
 
-        // Provide user with message once the publishing has began
+        //Provide user with message once the publishing has began
         $this->info('Initializing the stater package....');
 
         //Run the publishing of the starter package
@@ -121,19 +121,23 @@ class Initialization extends Command
         $configurer = new Configurer($this, [
             'models_path' => [
                 'question' => 'Where do you wish to save the models?',
-                'default' => config('starter.model.path')
+                'default' => config('starter.model.path'),
+                'config' => 'starter.model.path'
             ],
             'controllers_path' => [
                 'question' => 'Where do you wish to save the controllers?',
-                'default' => config('starter.controller.path')
+                'default' => config('starter.controller.path'),
+                'config' => 'starter.controller.path'
             ],
             'repositories_path' => [
                 'question' => 'Where do you wish to save the repositories?',
-                'default' => config('starter.repository.path')
+                'default' => config('starter.repository.path'),
+                'config' => 'starter.repository.path'
             ],
             'transformers_path' => [
                 'question' => 'Where do you wish to save the transformers?',
-                'default' => config('starter.transformer.path')
+                'default' => config('starter.transformer.path'),
+                'config' => 'starter.transformer.path'
             ]
         ]);
         $configurer->run();
