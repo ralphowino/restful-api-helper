@@ -3,9 +3,9 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 
 class StarterResourceCommand extends GeneratorCommand
 {

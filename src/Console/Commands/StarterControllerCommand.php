@@ -86,8 +86,14 @@ class StarterControllerCommand extends GeneratorCommand
      */
     public function fire()
     {
-        if(!$this->option('plain')) {
-            $fields = ['all', 'index', 'show', 'store', 'update', 'destroy'];
+        $possible_methods = ['index', 'show', 'store', 'update', 'destroy']; //Available controller methods
+
+        if ($this->option('only')) {
+            $this->fields = array_intersect($possible_methods, explode(",", $this->option('only')));
+        } elseif ($this->option('except')) {
+            $this->fields = array_diff($possible_methods, explode(",", $this->option('except')));
+        } elseif (!$this->option('plain')) {
+            $fields = array_merge(['all'], $possible_methods);
             $this->fields = $this->choice('Select the methods you want in your controller', $fields, 0, null, true);
         }
 
@@ -134,7 +140,9 @@ class StarterControllerCommand extends GeneratorCommand
     protected function getOptions()
     {
         return array(
-            array('plain', '-p', InputOption::VALUE_NONE, 'Create a plain controller')
+            array('plain', '-p', InputOption::VALUE_NONE, 'Create a plain controller'),
+            array('except', null, InputOption::VALUE_OPTIONAL, 'Create controller without this methods'),
+            array('only', null, InputOption::VALUE_OPTIONAL, 'Create controller with only this methods'),
         );
     }
 
