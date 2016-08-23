@@ -29,7 +29,7 @@ return [
      * 2. Extends - The class the created controller extends
      */
     'controller' => [
-        'path' => 'Http\\Controllers',
+        'path' => 'Http\\Controllers\\Api',
         'extends' => 'Http\\Controllers\\Controller'
     ],
 
@@ -65,5 +65,15 @@ return [
      */
     'routes' => [
         'path' => 'Http'
+    ],
+
+    /*
+     * The default classes for the application
+     *
+     * 1. Repository - the default repository for the controllers
+     */
+    'default' => [
+        'repository' => 'UsersRepository',
+        'transformer' => 'UsersTransformer'
     ]
 ];

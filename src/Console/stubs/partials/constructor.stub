@@ -1,0 +1,25 @@
+/**
+     * The repository variable
+     *
+     * @var {{repository-class}}
+     */
+    protected $repository;
+
+    /**
+     * The transformer variable
+     *
+     * @var {{transformer-class}}
+     */
+    protected $transformer;
+
+    /**
+     * The constructor for the controller
+     *
+     * @param {{repository-class}} ${{repository-variable}}
+     * @param {{transformer-class}} ${{transformer-variable}}
+     */
+    public function __construct({{repository-class}} ${{repository-variable}}, {{transformer-class}} ${{transformer-variable}})
+    {
+        $this->repository = ${{repository-variable}};
+        $this->transformer = ${{transformer-variable}};
+    }

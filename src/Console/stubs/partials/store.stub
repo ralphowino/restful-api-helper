@@ -7,5 +7,9 @@
      */
     public function store(Request $request)
     {
-        //
+        // TODO: Validate the input
+        $item = $this->repository->create($request);
+        return $this->response()
+                    ->item($item, $this->transformer)
+                    ->setStatusCode(Response::HTTP_CREATED);
     }

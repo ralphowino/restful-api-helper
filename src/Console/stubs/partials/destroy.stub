@@ -7,5 +7,6 @@
      */
     public function destroy($id)
     {
-        //
+        $this->repository->delete($id);
+        return $this->response->noContent();
     }

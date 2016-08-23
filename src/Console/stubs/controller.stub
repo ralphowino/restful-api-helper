@@ -4,10 +4,13 @@ namespace DummyNamespace;
 
 use Illuminate\Http\Request;
 
+use {{import-repository}};
+use {{import-transformer}};
 use DummyRootNamespaceHttp\Requests;
 DummyBaseClassImport
 class DummyClass extends DummyBaseClass
 {
+    {{constructor}}
     {{index-method}}
     {{store-method}}
     {{show-method}}
