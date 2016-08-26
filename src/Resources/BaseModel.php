@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Data\Models;
+namespace Ralphowino\ApiStarter\Resources;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -17,6 +17,9 @@
      *
      * @param {{repository-class}} ${{repository-variable}}
      * @param {{transformer-class}} ${{transformer-variable}}
+     * {{transformer-class}} are used to convert model to json, with fields we would like to show.
+     * {{repository-class}} contains all logic used to manipulate the database you can override this with
+     * repository class you wish to have.
      */
     public function __construct({{repository-class}} ${{repository-variable}}, {{transformer-class}} ${{transformer-variable}})
     {

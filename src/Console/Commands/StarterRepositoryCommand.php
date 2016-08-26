@@ -4,12 +4,13 @@ namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
+use Ralphowino\ApiStarter\Console\Traits\ResourceClassCreator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class StarterRepositoryCommand extends GeneratorCommand
 {
-    use GeneratorCommandTrait;
+    use GeneratorCommandTrait, ResourceClassCreator;
 
     /**
      * The console command name.
@@ -33,20 +34,6 @@ class StarterRepositoryCommand extends GeneratorCommand
     protected $type = 'Repository';
 
     /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function fire()
-    {
-        if (parent::fire() !== false) {
-            if ($this->option('model')) {
-                $this->call('starter:model', ['name' =>$this->getModelInput()]);
-            }
-        }
-    }
-
-    /**
      * Get the stub file for the generator.
      *
      * @return string
@@ -55,7 +42,6 @@ class StarterRepositoryCommand extends GeneratorCommand
     {
         return file_exists(base_path('templates/repository.stub')) ? base_path('templates/repository.stub') : __DIR__.'/../stubs/repository.stub';
     }
-
 
     /**
      * Get the default namespace for the class.
@@ -66,6 +52,60 @@ class StarterRepositoryCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         return $this->getConfiguredNamespace($rootNamespace, strtolower($this->type));
+    }
+
+    /**
+     * Get the model namespace
+     *
+     * @return string
+     */
+    protected function getModelNamespace()
+    {
+        return $this->laravel->getNamespace() . config('starter.model.path');
+    }
+
+    /**
+     * Get the desired model name from the input.
+     *
+     * @return string
+     */
+    protected function getModelInput()
+    {
+        if($this->option('model') != 'automate') {
+            return trim($this->option('model'));
+        }
+
+        preg_match('/(.+)[Rr]epositor(?:ies|ys?)$/i', trim($name  = $this->argument('name')), $matches);
+
+        if(count($matches) != 0) {
+            return studly_case(strtolower(trim($matches[1])));
+        }
+
+        return studly_case(strtolower(trim($name)));
+    }
+
+    /**
+     * Get the desired repository name from the input.
+     *
+     * @return string
+     */
+    protected function getNameInput()
+    {
+        return $this->argument('name');
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function fire()
+    {
+        if (parent::fire() !== false) {
+            if ($this->option('model') && !$this->files->exists($this->getClassPath($this->getModelInput()))) {
+                $this->call('starter:model', ['name' =>$this->getModelInput()]);
+            }
+        }
     }
 
     /**
@@ -81,33 +121,25 @@ class StarterRepositoryCommand extends GeneratorCommand
         $stub = parent::buildClass($name);
 
         return $this->addExtendClass($stub, strtolower($this->type))
+                    ->addRepositoryName($stub)
                     ->addTraitNamespace($stub)
                     ->addModelNamespace($stub)
                     ->addModelName($stub);
     }
 
     /**
-     * Get the console command arguments.
+     * Add the repository's class name
      *
-     * @return array
+     * @param $stub
+     * @return $this
      */
-    protected function getArguments()
+    public function addRepositoryName(&$stub)
     {
-        return array(
-            array('name', InputArgument::REQUIRED, "The name of the model the repository is linked to."),
+        $stub = str_replace(
+            'DummyRepository', $this->getNameInput(), $stub
         );
-    }
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['model', 'm', InputOption::VALUE_NONE, 'Want a model for this repository?']
-        ];
+        return $this;
     }
 
     /**
@@ -140,10 +172,6 @@ class StarterRepositoryCommand extends GeneratorCommand
         );
 
         $stub = str_replace(
-            'DummyModelPlural', str_plural(studly_case($model)), $stub
-        );
-
-        $stub = str_replace(
             'DummyModel', $model, $stub
         );
 
@@ -168,38 +196,26 @@ class StarterRepositoryCommand extends GeneratorCommand
     }
 
     /**
-     * Get the model namespace
+     * Get the console command arguments.
      *
-     * @return string
+     * @return array
      */
-    protected function getModelNamespace()
+    protected function getArguments()
     {
-        return $this->laravel->getNamespace() . config('starter.model.path');
+        return array(
+            array('name', InputArgument::REQUIRED, "The name of the model the repository is linked to."),
+        );
     }
 
     /**
-     * Get the desired model name from the input.
+     * Get the console command options.
      *
-     * @return string
+     * @return array
      */
-    protected function getModelInput()
+    protected function getOptions()
     {
-        preg_match('/(.+)[Rr]epositor(?:ies|ys?)$/i', trim($name  = $this->argument('name')), $matches);
-
-        if(count($matches) != 0) {
-            return studly_case(strtolower(trim($matches[1])));
-        }
-
-        return studly_case(strtolower(trim($name)));
-    }
-
-    /**
-     * Get the desired model name from the input.
-     *
-     * @return string
-     */
-    protected function getNameInput()
-    {
-        return studly_case($this->getModelInput()) . 'Repository';
+        return [
+            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Want a model for this repository?', 'automate']
+        ];
     }
 }

@@ -3,18 +3,19 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Composer;
+use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 use Ralphowino\ApiStarter\Console\Migrations\NameParser;
 use Ralphowino\ApiStarter\Console\Migrations\SchemaParser;
 use Ralphowino\ApiStarter\Console\Migrations\SyntaxBuilder;
-use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Console\AppNamespaceDetectorTrait;
-use Symfony\Component\Console\Input\InputArgument;
+use Ralphowino\ApiStarter\Console\Traits\ResourceClassCreator;
 
 class StarterMigrationCommand extends Command
 {
-    use AppNamespaceDetectorTrait;
+    use ResourceClassCreator;
+
     /**
      * The console command name.
      *
@@ -65,6 +66,42 @@ class StarterMigrationCommand extends Command
         $this->composer = app()['composer'];
         $this->type = 'Migration';
     }
+
+    /**
+     * Check if the migration
+     *
+     * @return bool
+     */
+    private function getArchiveInput()
+    {
+        return boolval($this->option('soft-deletes'));
+    }
+
+    /**
+     * Get the class name for the Eloquent model generator.
+     *
+     * @return string
+     */
+    protected function getModelName()
+    {
+        if ($this->option('model')) {
+            return trim($this->option('model'));
+        }
+
+        return ucwords(str_singular(camel_case($this->meta['table'])));
+    }
+
+    /**
+     * Get the path to where we should store the migration.
+     *
+     * @param  string $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        return base_path() . '/database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
+    }
+
     /**
      * Execute the console command.
      *
@@ -76,6 +113,21 @@ class StarterMigrationCommand extends Command
         $this->makeMigration();
         $this->makeModel();
     }
+
+    /**
+     * Compile the migration stub.
+     *
+     * @return string
+     */
+    protected function compileMigrationStub()
+    {
+        $stub = $this->files->get((file_exists(base_path('templates/migration.stub'))) ? base_path('templates/migration.stub') : __DIR__ . '/../stubs/migration.stub');
+        $this->replaceClassName($stub)
+            ->replaceSchema($stub)
+            ->replaceTableName($stub);
+        return $stub;
+    }
+
     /**
      * Generate the desired migration.
      */
@@ -91,18 +143,28 @@ class StarterMigrationCommand extends Command
         $this->info('Migration created successfully.');
         $this->composer->dumpAutoloads();
     }
+
     /**
      * Generate an Eloquent model, if the user wishes.
      */
     protected function makeModel()
     {
-        $modelPath = $this->getModelPath($this->getModelName());
+        $modelPath = $this->getClassPath($this->getModelName());
         if ($this->option('model') && !$this->files->exists($modelPath)) {
-            $this->call('starter:model', [
-                'name' => $this->getModelName()
-            ]);
+            $modelParameters = [
+                'name' => $this->getModelName(),
+                '--table' => $this->meta['table'],
+                '--schema' => $this->option('schema')
+            ];
+
+            if ($this->getArchiveInput()) {
+                $modelParameters['--soft-deletes'] =  true;
+            }
+
+            $this->call('starter:model', $modelParameters);
         }
     }
+
     /**
      * Build the directory for the class if necessary.
      *
@@ -115,40 +177,7 @@ class StarterMigrationCommand extends Command
             $this->files->makeDirectory(dirname($path), 0777, true, true);
         }
     }
-    /**
-     * Get the path to where we should store the migration.
-     *
-     * @param  string $name
-     * @return string
-     */
-    protected function getPath($name)
-    {
-        return base_path() . '/database/migrations/' . date('Y_m_d_His') . '_' . $name . '.php';
-    }
-    /**
-     * Get the destination class path.
-     *
-     * @param  string $name
-     * @return string
-     */
-    protected function getModelPath($name)
-    {
-        $name = config('starter.model.path') . '\\' . str_replace($this->getAppNamespace(), '', $name);
-        return $this->laravel['path'] . '/' . str_replace('\\', '/', $name) . '.php';
-    }
-    /**
-     * Compile the migration stub.
-     *
-     * @return string
-     */
-    protected function compileMigrationStub()
-    {
-        $stub = $this->files->get((file_exists(base_path('templates/migration.stub'))) ? base_path('templates/migration.stub') : __DIR__ . '/../stubs/migration.stub');
-        $this->replaceClassName($stub)
-            ->replaceSchema($stub)
-            ->replaceTableName($stub);
-        return $stub;
-    }
+
     /**
      * Replace the class name in the stub.
      *
@@ -161,6 +190,7 @@ class StarterMigrationCommand extends Command
         $stub = str_replace('{{class}}', $className, $stub);
         return $this;
     }
+
     /**
      * Replace the table name in the stub.
      *
@@ -173,6 +203,7 @@ class StarterMigrationCommand extends Command
         $stub = str_replace('{{table}}', $table, $stub);
         return $this;
     }
+
     /**
      * Replace the schema for the stub.
      *
@@ -187,26 +218,6 @@ class StarterMigrationCommand extends Command
         $schema = (new SyntaxBuilder)->create($schema, $this->meta, $this->getArchiveInput());
         $stub = str_replace(['{{schema_up}}', '{{schema_down}}'], $schema, $stub);
         return $this;
-    }
-    
-    /**
-     * Get the class name for the Eloquent model generator.
-     *
-     * @return string
-     */
-    protected function getModelName()
-    {
-        return ucwords(str_singular(camel_case($this->meta['table'])));
-    }
-
-    /**
-     * Check if the migration
-     *
-     * @return bool
-     */
-    private function getArchiveInput()
-    {
-        return boolval($this->option('archive'));
     }
 
     /**
@@ -231,7 +242,7 @@ class StarterMigrationCommand extends Command
         return [
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
             ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', false],
-            ['archive', 'a', InputOption::VALUE_NONE, 'Want a migration with soft deletes?'],
+            ['soft-deletes', null, InputOption::VALUE_NONE, 'Adds soft-delete to the created migration'],
         ];
     }
 }

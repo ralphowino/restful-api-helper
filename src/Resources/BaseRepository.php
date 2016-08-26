@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Data\Repositories;
+namespace Ralphowino\ApiStarter\Resources;
 
-class BaseRepository
+abstract class BaseRepository implements ResourcefulRepositoryInterface
 {
+    const INCLUDE_ARCHIVED = 1;
+
+    const RETURN_NULL_IF_NOT_FOUND = 2;
+
     /**
      * Resolve the query variable
      * 

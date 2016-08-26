@@ -24,7 +24,7 @@ trait GeneratorCommandTrait
         if ($baseClassImport == trim(config('starter.' . $type . '.path'), '\\')) {
             $baseClassImport = '';
         } else {
-            $baseClassImport = "use " . $this->getLaravel()->getNamespace() . $basePath . "; \n";
+            $baseClassImport = "use " . $basePath . "; \n";
         }
 
         //Add the Base class to the class

@@ -2,8 +2,6 @@
 
 namespace Ralphowino\ApiStarter\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -56,6 +54,17 @@ class StarterControllerCommand extends GeneratorCommand
     protected $transformer = '';
 
     /**
+     * Clean the user provided array of comma-separated options
+     *
+     * @param  $options_string
+     * @return array
+     */
+    public function cleanUserOptionArray($options_string)
+    {
+        return array_map('trim', array_map('strtolower', explode(",", $options_string)));
+    }
+
+    /**
      * Get the stub file for the generator.
      *
      * @return string
@@ -100,6 +109,16 @@ class StarterControllerCommand extends GeneratorCommand
     }
 
     /**
+     * Try determine the name of the controller's model
+     *
+     * @var string
+     */
+    public function getPossibleModelName()
+    {
+        return str_replace(['controller', 'Controller'], '', $this->getNameInput());
+    }
+
+    /**
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace
@@ -111,46 +130,43 @@ class StarterControllerCommand extends GeneratorCommand
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return bool|null
-     */
-    public function fire()
-    {
-        $this->determineControllerMethods();
-
-        $this->determineControllerRepository();
-
-        $this->determineControllerTransformer();
-
-        return parent::fire();
-    }
-
-    /**
      * Determine the controller's repository
      *
+     * @param bool $automate
      * @return void
      */
-    public function determineControllerRepository()
+    public function determineControllerRepository($automate = false)
     {
+        $repository_name = str_plural($this->getPossibleModelName()) . 'Repository'; // Build default repository name
+
         if (! $this->option('repository')) {
-            $this->repository = $this->ask('What is the repository for this controller?', config('starter.default.repository'));
+            $this->repository = $this->ask('What is the repository for this controller?', $repository_name);
         } else {
             $this->repository = $this->option('repository');
+        }
+
+        if ($automate) {
+            $this->call('starter:repository', ['name' => $this->repository]);
         }
     }
 
     /**
      * Determine the controller's transformer
      *
-     * @return void
+     * @param bool $automate
      */
-    public function determineControllerTransformer()
+    public function determineControllerTransformer($automate = false)
     {
+        $transformer_name = str_plural($this->getPossibleModelName()) . 'Transformer'; // Build default transformer name
+
         if (! $this->option('transformer')) {
-            $this->transformer = $this->ask('What is the transformer for this controller?', config('starter.default.transformer'));
+            $this->transformer = $this->ask('What is the transformer for this controller?', $transformer_name);
         } else {
             $this->transformer = $this->option('transformer');
+        }
+
+        if ($automate) {
+            $this->call('starter:transformer', ['name' => $this->transformer]);
         }
     }
 
@@ -164,15 +180,38 @@ class StarterControllerCommand extends GeneratorCommand
         $possible_methods = ['index', 'show', 'store', 'update', 'destroy']; //Available controller methods
 
         if ($this->option('only')) {
-            $this->fields = array_intersect($possible_methods, explode(",", $this->option('only')));
+            $this->fields = array_intersect($possible_methods, $this->cleanUserOptionArray($this->option('only')));
+
         } elseif ($this->option('except')) {
-            $this->fields = array_diff($possible_methods, explode(",", $this->option('except')));
-        } elseif ($this->option('resourceful')) {
+            $this->fields = array_diff($possible_methods, $this->cleanUserOptionArray($this->option('except')));
+
+        } elseif ($this->option('resource')) {
             $this->fields = $possible_methods;
-        } elseif (!$this->option('plain')) {
+
+        } else {
             $fields = array_merge(['all'], $possible_methods);
             $this->fields = $this->choice('Select the methods you want in your controller', $fields, 0, null, true);
         }
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return bool|null
+     */
+    public function fire()
+    {
+        $automate = $this->option('automate');
+
+        if (! $this->option('plain')) {
+            $this->determineControllerMethods();
+
+            $this->determineControllerRepository($automate);
+
+            $this->determineControllerTransformer($automate);
+        }
+
+        return parent::fire();
     }
 
     /**
@@ -196,35 +235,6 @@ class StarterControllerCommand extends GeneratorCommand
                     ->addShowMethod($stub)
                     ->addUpdateMethod($stub)
                     ->addDestroyMethod($stub);
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return array(
-            array('name', InputArgument::REQUIRED, "The controller's name."),
-        );
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array(
-            array('plain', '-p', InputOption::VALUE_NONE, 'Create a plain controller'),
-            array('resourceful', '-r', InputOption::VALUE_NONE, 'Create a resourceful controller'),
-            array('repository', null, InputOption::VALUE_OPTIONAL, "The controller's repository"),
-            array('transformer', null, InputOption::VALUE_OPTIONAL, "The controller's transformer"),
-            array('only', null, InputOption::VALUE_OPTIONAL, 'Create controller with only this methods'),
-            array('except', null, InputOption::VALUE_OPTIONAL, 'Create controller without this methods')
-        );
     }
 
     /**
@@ -364,5 +374,35 @@ class StarterControllerCommand extends GeneratorCommand
         );
 
         return $stub;
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return array(
+            array('name', InputArgument::REQUIRED, "The controller's name."),
+        );
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return array(
+            array('plain', '-p', InputOption::VALUE_NONE, 'Create a plain controller'),
+            array('resource', '-r', InputOption::VALUE_NONE, 'Create controller with the resourceful methods'),
+            array('automate', '-a', InputOption::VALUE_NONE, 'Create all the classes necessary automatically'),
+            array('repository', null, InputOption::VALUE_OPTIONAL, "Assign the controller the repository"),
+            array('transformer', null, InputOption::VALUE_OPTIONAL, "Assign the controller the transformer"),
+            array('only', null, InputOption::VALUE_OPTIONAL, 'Create controller with only this methods'),
+            array('except', null, InputOption::VALUE_OPTIONAL, 'Create controller without this methods')
+        );
     }
 }

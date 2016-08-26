@@ -3,17 +3,18 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
+use Ralphowino\ApiStarter\Console\Traits\ResourceClassCreator;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Ralphowino\ApiStarter\Console\Transformers\FieldsParser;
 use Ralphowino\ApiStarter\Console\Transformers\FieldsBuilder;
 use Ralphowino\ApiStarter\Console\Transformers\IncludeBuilder;
 use Ralphowino\ApiStarter\Console\Transformers\IncludesParser;
+use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
 
 class StarterTransformerCommand extends GeneratorCommand
 {
-    use GeneratorCommandTrait;
+    use GeneratorCommandTrait, ResourceClassCreator;
 
     /**
      * The console command name.
@@ -37,6 +38,57 @@ class StarterTransformerCommand extends GeneratorCommand
     protected $type = 'Transformer';
 
     /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $this->getConfiguredNamespace($rootNamespace, 'transformer');
+    }
+
+    /**
+     * Get the model namespace
+     *
+     * @return string
+     */
+    protected function getModelNamespace()
+    {
+        return $this->laravel->getNamespace() . config('starter.model.path');
+    }
+
+    /**
+     * Get the desired model name from the input.
+     *
+     * @return string
+     */
+    protected function getModelInput()
+    {
+        if($this->option('model') !== '0') {
+            return trim($this->option('model'));
+        }
+
+        preg_match('/(.+)[Tt]ransformers?$/i', trim($name  = $this->argument('name')), $matches);
+
+        if(count($matches) != 0) {
+            return studly_case(strtolower(trim($matches[1])));
+        }
+
+        return studly_case(strtolower(trim($name)));
+    }
+
+    /**
+     * Get the desired model name from the input.
+     *
+     * @return string
+     */
+    protected function getNameInput()
+    {
+        return trim($this->argument('name'));
+    }
+
+    /**
      * Get the stub file for the generator.
      *
      * @return string
@@ -46,16 +98,18 @@ class StarterTransformerCommand extends GeneratorCommand
         return file_exists(base_path('templates/transformer.stub')) ? base_path('templates/transformer.stub') : __DIR__.'/../stubs/transformer.stub';
     }
 
-
     /**
-     * Get the default namespace for the class.
+     * Execute the console command.
      *
-     * @param  string  $rootNamespace
-     * @return string
+     * @return void
      */
-    protected function getDefaultNamespace($rootNamespace)
+    public function fire()
     {
-        return $this->getConfiguredNamespace($rootNamespace, 'transformer');
+        if (parent::fire() !== false) {
+            if ($this->option('model') && !$this->files->exists($this->getClassPath($this->getModelInput()))) {
+                $this->call('starter:model', ['name' => $this->getModelInput()]);
+            }
+        }
     }
 
     /**
@@ -74,31 +128,6 @@ class StarterTransformerCommand extends GeneratorCommand
                     ->addModelName($stub)
                     ->addTransformerFields($stub)
                     ->addTransformerIncludes($stub);
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return array(
-            array('name', InputArgument::REQUIRED, "The name of the model the transformer is linked to."),
-        );
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['fields', 'f', InputOption::VALUE_OPTIONAL, 'The fields for the transformer', null],
-            ['includes', 'i', InputOption::VALUE_OPTIONAL, 'The includes for the transformer', null],
-        ];
     }
 
     /**
@@ -177,7 +206,7 @@ class StarterTransformerCommand extends GeneratorCommand
                 ['DummyTransformerIncludesMethods', 'DummyTransformerIncludes'] , $builtIncludes, $stub
             );
         }
-        
+
         $stub = str_replace(
             'DummyTransformerIncludesMethods', '', $stub
         );
@@ -190,39 +219,28 @@ class StarterTransformerCommand extends GeneratorCommand
     }
 
     /**
-     * Get the model namespace
+     * Get the console command arguments.
      *
-     * @return string
+     * @return array
      */
-    protected function getModelNamespace()
+    protected function getArguments()
     {
-        return $this->laravel->getNamespace() . config('starter.model.path');
-    }
-
-
-    /**
-     * Get the desired model name from the input.
-     *
-     * @return string
-     */
-    protected function getModelInput()
-    {
-        preg_match('/(.+)[Tt]ransformers?$/i', trim($name  = $this->argument('name')), $matches);
-
-        if(count($matches) != 0) {
-            return studly_case(strtolower(trim($matches[1])));
-        }
-
-        return studly_case(strtolower(trim($name)));
+        return array(
+            array('name', InputArgument::REQUIRED, "The name of the model the transformer is linked to."),
+        );
     }
 
     /**
-     * Get the desired model name from the input.
+     * Get the console command options.
      *
-     * @return string
+     * @return array
      */
-    protected function getNameInput()
+    protected function getOptions()
     {
-        return studly_case($this->getModelInput()) . 'Transformer';
+        return [
+            ['fields', 'f', InputOption::VALUE_OPTIONAL, 'The fields for the transformer', null],
+            ['includes', 'i', InputOption::VALUE_OPTIONAL, 'The includes for the transformer', null],
+            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Creates the transformer\'s model', '0'],
+        ];
     }
 }

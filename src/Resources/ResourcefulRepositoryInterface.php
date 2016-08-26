@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Data\Repositories\Contracts;
+namespace Ralphowino\ApiStarter\Resources;
 
 use Illuminate\Http\Request;
 
-interface BaseInterface
+interface ResourcefulRepositoryInterface
 {
-    const INCLUDE_ARCHIVED = 1;
-
-    const RETURN_NULL_IF_NOT_FOUND = 2;
-
     /**
      * @param $id
      * @return mixed

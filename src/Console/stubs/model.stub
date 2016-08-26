@@ -19,6 +19,6 @@ class DummyClass extends DummyBaseClass
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [DummyFillableFields];
     DummyRelationships
 }

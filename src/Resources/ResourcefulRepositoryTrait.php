@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Data\Repositories\Traits;
+namespace Ralphowino\ApiStarter\Resources;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use App\Data\Repositories\Contracts\BaseInterface;
 
-trait ResourcefulTrait
+trait ResourcefulRepositoryTrait
 {
     /**
      * Get a collection of models
@@ -89,7 +90,7 @@ trait ResourcefulTrait
      */
     public function create(Request $request)
     {
-        $record = $this->model->create(array_only($request->all(), $this->fields));
+        $record = $this->model->create($request->all());
         return $record;
     }
 
@@ -103,7 +104,7 @@ trait ResourcefulTrait
     public function update($id, Request $request)
     {
         $record = $this->getByKey($id);
-        $record->update(array_only($request->all(), $this->fields));
+        $record->update($request->all());
         return $record;
     }
 
@@ -119,14 +120,14 @@ trait ResourcefulTrait
     {
         if (is_int($includeArchived)) {
             switch ($includeArchived) {
-                case BaseInterface::INCLUDE_ARCHIVED:
+                case self::INCLUDE_ARCHIVED:
                     return $this->query->withTrashed()->findOrFail($key);
                     break;
                 case
-                    BaseInterface::INCLUDE_ARCHIVED | BaseInterface::RETURN_NULL_IF_NOT_FOUND :
+                    self::INCLUDE_ARCHIVED | self::RETURN_NULL_IF_NOT_FOUND :
                     return $this->query->withTrashed()->find($key);
                     break;
-                case BaseInterface::RETURN_NULL_IF_NOT_FOUND:
+                case self::RETURN_NULL_IF_NOT_FOUND:
                     return $this->query->find($key);
                     break;
                 default:
@@ -148,7 +149,7 @@ trait ResourcefulTrait
      */
     public function delete($id)
     {
-        $record = $this->getByKey($id, true);
+        $record = $this->getByKey($id);
         return $record->forceDelete();
     }
 

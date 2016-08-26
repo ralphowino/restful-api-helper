@@ -18,7 +18,7 @@ return [
      */
     'model' => [
         'path' => 'Data\\Models',
-        'extends' => 'Data\\Models\\Model'
+        'extends' => 'Ralphowino\\ApiStarter\\Resources\\BaseModel'
 
     ],
 
@@ -30,7 +30,7 @@ return [
      */
     'controller' => [
         'path' => 'Http\\Controllers\\Api',
-        'extends' => 'Http\\Controllers\\Controller'
+        'extends' => 'App\\Http\\Controllers\\Controller'
     ],
 
     /*
@@ -46,7 +46,7 @@ return [
             'path' => 'Data\\Repositories\\Traits'
         ],
         'path' => 'Data\\Repositories',
-        'extends' => 'Data\\Repositories\\BaseRepository'
+        'extends' => 'Ralphowino\\ApiStarter\\Resources\\BaseRepository'
     ],
 
     /*

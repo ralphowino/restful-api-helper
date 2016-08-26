@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use Validator;
 use App\Data\Models\User;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Api\Traits\JWTAuthenticationTrait;
+use Ralphowino\ApiStarter\Resources\JWTAuthenticationTrait;
 
 class AuthController extends Controller
 {

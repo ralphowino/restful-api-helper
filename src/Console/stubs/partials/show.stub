@@ -7,6 +7,6 @@
      */
     public function show($id)
     {
-        $item = $this->repository->getByKey($id, true);
+        $item = $this->repository->getByKey($id);
         return $this->response()->item($item, $this->transformer);
     }

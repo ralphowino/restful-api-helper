@@ -40,34 +40,6 @@ class StarterResourceCommand extends GeneratorCommand
     protected $resource;
 
     /**
-     * Execute the console command.
-     *
-     * @return bool|null
-     */
-    public function fire()
-    {
-        $this->resource = $this->getNameInput();
-
-        // Create the model
-        $modelVariables = $this->getModelVariables();
-        $this->call('starter:model', $modelVariables);
-
-        // Create the transformer
-        $transformerVariables = $this->getTransformerVariables();
-        $this->call('starter:transformer', $transformerVariables);
-
-        // Create the controller
-        $controllerVariables = $this->getControllerVariables();
-        $this->call('starter:controller', $controllerVariables);
-
-        // Create the repository
-        $repositoryVariables = $this->getRepositoryVariables();
-        $this->call('starter:repository', $repositoryVariables);
-
-        // Todo: Add the rules for the resource [create-rules, update-rules]
-    }
-
-    /**
      * Build the controller variables array
      *
      * @return array
@@ -79,6 +51,24 @@ class StarterResourceCommand extends GeneratorCommand
 
         // Set the controller name
         $controllerVariables['name'] = $this->getControllerInput();
+
+        // Set the repository name
+        $controllerVariables['--repository'] = $this->getRepositoryInput();
+
+        // Set the transformer name
+        $controllerVariables['--transformer'] = $this->getTransformerInput();
+
+        // Select the controller methods
+        if($this->option('only')) {
+            // Set the only controller methods to be created
+            $controllerVariables['--only'] = $this->option('only');
+        } else if($this->option('except')) {
+            // Exempt this methods from the controller generated
+            $controllerVariables['--except'] = $this->option('except');
+        } else {
+            // Make the controller resourceful
+            $controllerVariables['--resource'] = true;
+        }
 
         // Return the controller variables array
         return $controllerVariables;
@@ -111,6 +101,11 @@ class StarterResourceCommand extends GeneratorCommand
 
         // Set the model name
         $modelVariables['name'] = $this->getModelInput();
+
+        // Set the resources table
+        if ($this->option('table')) {
+            $modelVariables['--table'] = trim($this->option('table'));
+        }
 
         // Set the resource's schema
         if($this->option('schema')){
@@ -179,6 +174,9 @@ class StarterResourceCommand extends GeneratorCommand
         // Set the repository name
         $repositoryVariables['name'] = $this->getRepositoryInput();
 
+        // Set the repository model
+        $repositoryVariables['--model'] = $this->getModelInput();
+
         // Return the repository variables array
         return $repositoryVariables;
     }
@@ -209,6 +207,9 @@ class StarterResourceCommand extends GeneratorCommand
 
         // Set the name for the transformer
         $transformerVariables['name'] = $this->getTransformerInput();
+
+        // Set the transformer's model
+        $transformerVariables['--model'] = $this->getModelInput();
 
         // Set the fields for the transformer
         $transformerVariables['--fields'] = $this->getTransformerFieldsInput();
@@ -242,7 +243,7 @@ class StarterResourceCommand extends GeneratorCommand
      */
     public function getTransformerFieldsInput()
     {
-        return $this->option('transformer-fields');
+        return $this->option('fields');
     }
 
     /**
@@ -252,7 +253,35 @@ class StarterResourceCommand extends GeneratorCommand
      */
     public function getTransformerIncludesInput()
     {
-        return $this->option('transformer-includes');
+        return $this->option('includes');
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return bool|null
+     */
+    public function fire()
+    {
+        $this->resource = $this->getNameInput();
+
+        // Create the model
+        $modelVariables = $this->getModelVariables();
+        $this->call('starter:model', $modelVariables);
+
+        // Create the controller
+        $controllerVariables = $this->getControllerVariables();
+        $this->call('starter:controller', $controllerVariables);
+
+        // Create the transformer
+        $transformerVariables = $this->getTransformerVariables();
+        $this->call('starter:transformer', $transformerVariables);
+
+        // Create the repository
+        $repositoryVariables = $this->getRepositoryVariables();
+        $this->call('starter:repository', $repositoryVariables);
+
+        // Todo: Add the rules for the resource [create-rules, update-rules]
     }
 
     /**
@@ -275,15 +304,19 @@ class StarterResourceCommand extends GeneratorCommand
     protected function getOptions()
     {
         return array(
-            array('model', null, InputOption::VALUE_OPTIONAL, 'Link to a specific model'),
-            array('repository', null, InputOption::VALUE_OPTIONAL, 'Link to a specific repository'),
             array('controller', null, InputOption::VALUE_OPTIONAL, 'Link to a specific controller'),
-            array('transformer', null, InputOption::VALUE_OPTIONAL, 'Link to a specific transformer'),
+            array('fields', null, InputOption::VALUE_OPTIONAL, 'Define the fields that the transformer will provide'),
+            array('includes', null, InputOption::VALUE_OPTIONAL, 'Define the transformer\'s includes'),
+            array('model', null, InputOption::VALUE_OPTIONAL, 'Link to a specific model'),
+            array('only', null, InputOption::VALUE_OPTIONAL, 'Define controller methods to create'),
+            array('except', null, InputOption::VALUE_OPTIONAL, 'Define controller methods not to create'),
+            array('model', null, InputOption::VALUE_OPTIONAL, 'Link to a specific model'),
+            array('relationships', null, InputOption::VALUE_OPTIONAL, 'This are the relationships for the resource'),
+            array('repository', null, InputOption::VALUE_OPTIONAL, 'Link to a specific repository'),
             array('schema', null, InputOption::VALUE_OPTIONAL, 'This is the schema for the resource'),
             array('soft-deletes', null, InputOption::VALUE_NONE, 'Adds soft deletion to the resource'),
-            array('relationships', null, InputOption::VALUE_OPTIONAL, 'This are the relationships for the resource'),
-            array('transformer-fields', null, InputOption::VALUE_OPTIONAL, 'This are the fields to include to the resource\'s transformer'),
-            array('transformer-includes', null, InputOption::VALUE_OPTIONAL, 'This is are the models to include to the resource\'s transformer'),
+            array('table', null, InputOption::VALUE_OPTIONAL, 'Define the resource\'s table'),
+            array('transformer', null, InputOption::VALUE_OPTIONAL, 'Link to a specific transformer'),
         );
     }
 

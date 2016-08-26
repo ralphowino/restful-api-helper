@@ -3,11 +3,11 @@
 namespace DummyNamespace;
 
 use DummyModelNamespace\DummyModel;
-use DummyTraitNamespace\Traits\ResourcefulTrait;
+use Ralphowino\ApiStarter\Resources\ResourcefulRepositoryTrait;
 DummyBaseClassImport
-class DummyModelPluralRepository extends DummyBaseClass
+class DummyRepository extends DummyBaseClass
 {
-    use ResourcefulTrait;
+    use ResourcefulRepositoryTrait;
 
     /**
      * This is the repository's model
@@ -17,7 +17,7 @@ class DummyModelPluralRepository extends DummyBaseClass
     protected $model;
 
     /**
-     * DummyModelPluralRepository constructor
+     * DummyRepository constructor
 
      * @param DummyModel $DummyModelCamel
      */

@@ -4,6 +4,7 @@ namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Ralphowino\ApiStarter\Console\Migrations\SchemaParser;
 use Ralphowino\ApiStarter\Console\Models\RelationsBuilder;
 use Ralphowino\ApiStarter\Console\Models\RelationsParser;
 use Ralphowino\ApiStarter\Console\Traits\GeneratorCommandTrait;
@@ -36,13 +37,13 @@ class StarterModelCommand extends GeneratorCommand
     protected $type = 'Model';
 
     /**
-     * Get the stub file for the generator.
+     * Check if the model should archive
      *
-     * @return string
+     * @return bool
      */
-    protected function getStub()
+    private function getArchiveInput()
     {
-        return (file_exists(base_path('templates/model.stub'))) ? base_path('templates/model.stub') : __DIR__ . '/../stubs/model.stub';
+        return boolval($this->option('soft-deletes'));
     }
 
     /**
@@ -57,6 +58,76 @@ class StarterModelCommand extends GeneratorCommand
     }
 
     /**
+     * Fetch the fillable fields for the model
+     *
+     * @return string
+     */
+    protected function getFillableFields()
+    {
+        if($this->option('fillable')) {
+            $arrayFields = explode(",", $this->option('fillable'));
+
+            return stringfy_array($arrayFields);
+        }
+
+        if($this->option('schema')) {
+            $fieldSchema = (new SchemaParser())->parse($this->option('schema'));
+            $arrayFields = [];
+            foreach ($fieldSchema as $record){
+                $arrayFields[] = $record['name'];
+            }
+
+            return stringfy_array($arrayFields);
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the desired class name from the input.
+     *
+     * @return string
+     */
+    protected function getNameInput()
+    {
+        return trim($this->argument('name'));
+    }
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return (file_exists(base_path('templates/model.stub'))) ? base_path('templates/model.stub') : __DIR__ . '/../stubs/model.stub';
+    }
+
+    /**
+     * Gets the table name for the model
+     *
+     * @return string
+     */
+    private function getTableInput()
+    {
+        if (!is_null($name = $this->option('table'))) {
+            return trim($this->option('table'));
+        }
+
+        return $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
+    }
+
+    /**
+     * Gets the model's schema input
+     *
+     * @return string
+     */
+    private function getSchemaInput()
+    {
+        return $this->option('schema');
+    }
+
+    /**
      * Execute the console command.
      *
      * @return void
@@ -64,18 +135,11 @@ class StarterModelCommand extends GeneratorCommand
     public function fire()
     {
         if (parent::fire() !== false) {
-            if ($this->option('migration')) {
-                $table = $this->getTableInput();
+            $this->createMigration();
 
-                $migrationVariables = ['name' => "create_{$table}_table", '--schema' => $this->getSchemaInput()];
+            $this->createRepository();
 
-                //Check if the model is to be archived
-                if ($this->getArchiveInput()) {
-                    $migrationVariables['--archive'] = true;
-                }
-
-                $this->call('starter:migration', $migrationVariables);
-            }
+            $this->createTransformer();
         }
     }
 
@@ -94,8 +158,58 @@ class StarterModelCommand extends GeneratorCommand
             ->addExtendClass($stub, strtolower($this->type))
             ->replaceNamespace($stub, $name)
             ->replaceTable($stub, $this->getTableInput())
+            ->replaceFillable($stub, $this->getFillableFields())
             ->replaceArchive($stub, $this->getArchiveInput())
             ->replaceClass($stub, $name);
+    }
+
+    /**
+     * Create the model's migration
+     *
+     * @return void
+     */
+    protected function createMigration()
+    {
+        if ($this->option('migration')) {
+            $table = $this->getTableInput();
+
+            $migrationVariables = ['name' => "create_{$table}_table", '--schema' => $this->getSchemaInput()];
+
+            //Check if the model is to be archived
+            if ($this->getArchiveInput()) {
+                $migrationVariables['--soft-deletes'] = true;
+            }
+
+            $this->call('starter:migration', $migrationVariables);
+        }
+    }
+
+    /**
+     * Create the model's repository class
+     *
+     * @return void
+     */
+    protected function createRepository()
+    {
+        if ($this->option('repository')) {
+            $model = ucwords($this->getNameInput());
+
+            $this->call('starter:repository', ['name' => $model . 'Repository']);
+        }
+    }
+
+    /**
+     * Create the model's transformer class
+     *
+     * @return void
+     */
+    protected function createTransformer()
+    {
+        if ($this->option('transformer')) {
+            $model = ucwords($this->getNameInput());
+
+            $this->call('starter:transformer', ['name' => $model . 'Transformer']);
+        }
     }
 
     /**
@@ -148,6 +262,21 @@ class StarterModelCommand extends GeneratorCommand
     }
 
     /**
+     * Add the fillable fields to the model
+     *
+     * @param $stub
+     * @param $fields
+     * @return $this
+     */
+    private function replaceFillable(&$stub, $fields) {
+        $stub = str_replace(
+            "DummyFillableFields", $fields, $stub
+        );
+
+        return $this;
+    }
+
+    /**
      * Add the model's relationships
      *
      * @param $stub
@@ -171,50 +300,6 @@ class StarterModelCommand extends GeneratorCommand
     }
 
     /**
-     * Get the desired class name from the input.
-     *
-     * @return string
-     */
-    protected function getNameInput()
-    {
-        return trim($this->argument('name'));
-    }
-
-    /**
-     * Gets the table name for the model
-     *
-     * @return string
-     */
-    private function getTableInput()
-    {
-        if (!is_null($name = $this->option('table'))) {
-            return trim($this->option('table'));
-        }
-
-        return $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
-    }
-
-    /**
-     * Check if the model should archive
-     *
-     * @return bool
-     */
-    private function getArchiveInput()
-    {
-        return boolval($this->option('soft-deletes'));
-    }
-
-    /**
-     * Gets the model's schema input
-     *
-     * @return string
-     */
-    private function getSchemaInput()
-    {
-        return $this->option('schema');
-    }
-
-    /**
      * Get the console command options.
      *
      * @return array
@@ -222,11 +307,14 @@ class StarterModelCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['relationships', null, InputOption::VALUE_OPTIONAL, 'The model\'s relationship.'],
-            ['schema', null, InputOption::VALUE_OPTIONAL, 'The fields of the model to create.'],
-            ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model.'],
-            ['table', null, InputOption::VALUE_OPTIONAL, 'Assigns the model a specific table for it.'],
-            ['soft-deletes', 'a', InputOption::VALUE_NONE, 'Adds soft delete to the model being created.'],
+            ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration for the model.'],
+            ['fillable', 'f', InputOption::VALUE_OPTIONAL, 'Define the fillable fields for the model'],
+            ['repository', 'r', InputOption::VALUE_NONE, 'Define the model\'s repository'],
+            ['relationships', null, InputOption::VALUE_OPTIONAL, 'Define the model\'s relationships'],
+            ['schema', null, InputOption::VALUE_OPTIONAL, 'Define the fields of the model'],
+            ['soft-deletes', 'a', InputOption::VALUE_NONE, 'Adds soft delete to the model'],
+            ['table', null, InputOption::VALUE_OPTIONAL, 'Assigns the model a table'],
+            ['transformer', 't', InputOption::VALUE_NONE, 'Define the model\'s transformer'],
         ];
     }
 }

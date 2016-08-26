@@ -51,7 +51,12 @@ class ApiStarterServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         //Generate the jwt secret key
-        //$this->runProcess('php artisan jwt:generate');
+        $this->registerHelpers();
+    }
+
+    public function registerHelpers()
+    {
+        require_once __DIR__ . '/helpers.php';
     }
 
     /**

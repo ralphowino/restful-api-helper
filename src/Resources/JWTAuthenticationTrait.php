@@ -1,5 +1,6 @@
 <?php
-namespace App\Http\Controllers\Api\Traits;
+
+namespace Ralphowino\ApiStarter\Resources;
 
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
