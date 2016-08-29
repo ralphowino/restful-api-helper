@@ -223,7 +223,7 @@ Guides you on setting up the basic structure for the application's folders and p
 <h4>
 <a id="3-startermigration" class="anchor" href="#3-startermigration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. starter:migration</h4>
 
-<p>This command is used to create a migration </p>
+<p>This command creates a new migration for the application</p>
 
 <h5>
 <a id="arguments-2" class="anchor" href="#arguments-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
@@ -242,13 +242,13 @@ Guides you on setting up the basic structure for the application's folders and p
 <li>
 <code>--model</code>   - This option creates a model along with the migration</li>
 <li>
-<code>--archive</code> - This option adds soft deletes to the migration</li>
+<code>--soft-deletes</code> - This option adds soft deletes to the migration</li>
 </ul>
 
 <h5>
 <a id="example-1" class="anchor" href="#example-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
 
-<pre><code>php artisan starter:migration create_tasks_table --schema="name:string:unique, slug:string:nullable" --archive
+<pre><code>php artisan starter:migration create_tasks_table --schema="title:string, description:text" --soft-deletes
 </code></pre>
 
 <p>The schema format remains the same as that of the model command</p>
@@ -271,8 +271,8 @@ Guides you on setting up the basic structure for the application's folders and p
 <span class="pl-s1">    {</span>
 <span class="pl-s1">        <span class="pl-c1">Schema</span><span class="pl-k">::</span>create(<span class="pl-s"><span class="pl-pds">'</span>tasks<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-c1">Blueprint</span> <span class="pl-smi">$table</span>) {</span>
 <span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>increments(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>);</span>
-<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>string(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>unique();</span>
-<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>string(<span class="pl-s"><span class="pl-pds">'</span>slug<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>nullable();</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>string(<span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>text(<span class="pl-s"><span class="pl-pds">'</span>description<span class="pl-pds">'</span></span>);</span>
 <span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>softDeletes();</span>
 <span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>timestamps();</span>
 <span class="pl-s1">        });</span>
@@ -292,9 +292,7 @@ Guides you on setting up the basic structure for the application's folders and p
 <h4>
 <a id="4-startercontroller" class="anchor" href="#4-startercontroller" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. starter:controller</h4>
 
-<p>This command creates a controller for the application and extends the BaseController automatically and is saved in the specified
-folder in the config file although all this is fully configurable in the config file. The controller uses the resourceful trait
-straight of the box.</p>
+<p>This command creates a controller for the application and extends the BaseController automatically and is saved in the specified folder in the config file although all this (Class to extend and place to save the controller) is fully configurable in the config file.</p>
 
 <h5>
 <a id="arguments-3" class="anchor" href="#arguments-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
@@ -310,12 +308,24 @@ straight of the box.</p>
 <ul>
 <li>
 <code>--plain</code> - This option does not include the resourceful trait in the controller</li>
+<li>
+<code>--resource</code> - This option creates a controller with all the resourceful methods</li>
+<li>
+<code>--automate</code> - This option creates all the described classes for the controller e.g. The accompanying repository and transformer</li>
+<li>
+<code>--repository</code> - This defines the repository for the controller</li>
+<li>
+<code>--transformer</code> - This defines the transformer for the controller</li>
+<li>
+<code>--only</code> - This option describes the methods to have in the controller</li>
+<li>
+<code>--except</code> - This option defines the methods to exclude from the controller's methods</li>
 </ul>
 
 <h5>
 <a id="example-2" class="anchor" href="#example-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
 
-<pre><code>php artisan starter:controller TasksController
+<pre><code>php artisan starter:controller TasksController --only="index,show"
 </code></pre>
 
 <p>...the controller generated by the above command:</p>
@@ -324,33 +334,58 @@ straight of the box.</p>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Http\Controllers\Api</span>;</span>
 <span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Dingo\Api\Http\Response</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Illuminate\Http\Request</span>;</span>
 <span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Repositories\TasksRepository</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Transformers\TasksTransformer</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Requests</span>;</span>
-<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Controllers\Controller</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Controllers\Controller</span>; </span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TasksController</span> <span class="pl-k">extends</span> <span class="pl-e">Controller</span></span>
 <span class="pl-s1">{</span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
-<span class="pl-s1"><span class="pl-c">     * Display a listing of the resource.</span></span>
+<span class="pl-s1"><span class="pl-c">     * The repository variable</span></span>
 <span class="pl-s1"><span class="pl-c">     *</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Http\Response</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> TasksRepository</span></span>
 <span class="pl-s1"><span class="pl-c">     */</span></span>
-<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">index</span>()</span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$repository</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * The transformer variable</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> TasksTransformer</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$transformer</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * The constructor for the controller</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> TasksRepository $tasksRepository</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> TasksTransformer $tasksTransformer</span></span>
+<span class="pl-s1"><span class="pl-c">     * TasksTransformer are used to convert model to json, with fields we would like to show.</span></span>
+<span class="pl-s1"><span class="pl-c">     * TasksRepository contains all logic used to manipulate the database you can override this with</span></span>
+<span class="pl-s1"><span class="pl-c">     * repository class you wish to have.</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-c1">__construct</span>(<span class="pl-c1">TasksRepository</span> <span class="pl-smi">$tasksRepository</span>, <span class="pl-c1">TasksTransformer</span> <span class="pl-smi">$tasksTransformer</span>)</span>
 <span class="pl-s1">    {</span>
-<span class="pl-s1">        <span class="pl-c">//</span></span>
+<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">repository</span> <span class="pl-k">=</span> <span class="pl-smi">$tasksRepository</span>;</span>
+<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">transformer</span> <span class="pl-k">=</span> <span class="pl-smi">$tasksTransformer</span>;</span>
 <span class="pl-s1">    }</span>
 <span class="pl-s1"></span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
-<span class="pl-s1"><span class="pl-c">     * Store a newly created resource in storage.</span></span>
+<span class="pl-s1"><span class="pl-c">     * Display a listing of the resource.</span></span>
 <span class="pl-s1"><span class="pl-c">     *</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span>  \Illuminate\Http\Request  $request</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Request $request</span></span>
 <span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Http\Response</span></span>
 <span class="pl-s1"><span class="pl-c">     */</span></span>
-<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">store</span>(<span class="pl-c1">Request</span> <span class="pl-smi">$request</span>)</span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">index</span>(<span class="pl-c1">Request</span> <span class="pl-smi">$request</span>)</span>
 <span class="pl-s1">    {</span>
-<span class="pl-s1">        <span class="pl-c">//</span></span>
+<span class="pl-s1">        <span class="pl-smi">$archived</span> <span class="pl-k">=</span> <span class="pl-smi">$request</span><span class="pl-k">-&gt;</span>input(<span class="pl-s"><span class="pl-pds">'</span>archived<span class="pl-pds">'</span></span>, <span class="pl-c1">false</span>);</span>
+<span class="pl-s1">        <span class="pl-smi">$collection</span> <span class="pl-k">=</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">repository</span><span class="pl-k">-&gt;</span>getPaginated(<span class="pl-smi">$request</span><span class="pl-k">-&gt;</span>get(<span class="pl-s"><span class="pl-pds">'</span>per_page<span class="pl-pds">'</span></span>, <span class="pl-c1">10</span>), <span class="pl-smi">$archived</span>);</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>response()<span class="pl-k">-&gt;</span>paginator(<span class="pl-smi">$collection</span>, <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">transformer</span>);</span>
 <span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
 <span class="pl-s1"></span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
 <span class="pl-s1"><span class="pl-c">     * Display the specified resource.</span></span>
@@ -360,31 +395,11 @@ straight of the box.</p>
 <span class="pl-s1"><span class="pl-c">     */</span></span>
 <span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">show</span>(<span class="pl-smi">$id</span>)</span>
 <span class="pl-s1">    {</span>
-<span class="pl-s1">        <span class="pl-c">//</span></span>
+<span class="pl-s1">        <span class="pl-smi">$item</span> <span class="pl-k">=</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">repository</span><span class="pl-k">-&gt;</span>getByKey(<span class="pl-smi">$id</span>);</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>response()<span class="pl-k">-&gt;</span>item(<span class="pl-smi">$item</span>, <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">transformer</span>);</span>
 <span class="pl-s1">    }</span>
 <span class="pl-s1"></span>
-<span class="pl-s1">    <span class="pl-c">/**</span></span>
-<span class="pl-s1"><span class="pl-c">     * Update the specified resource in storage.</span></span>
-<span class="pl-s1"><span class="pl-c">     *</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span>  \Illuminate\Http\Request  $request</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span>  int  $id</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Http\Response</span></span>
-<span class="pl-s1"><span class="pl-c">     */</span></span>
-<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">update</span>(<span class="pl-c1">Request</span> <span class="pl-smi">$request</span>, <span class="pl-smi">$id</span>)</span>
-<span class="pl-s1">    {</span>
-<span class="pl-s1">        <span class="pl-c">//</span></span>
-<span class="pl-s1">    }</span>
 <span class="pl-s1"></span>
-<span class="pl-s1">    <span class="pl-c">/**</span></span>
-<span class="pl-s1"><span class="pl-c">     * Remove the specified resource from storage.</span></span>
-<span class="pl-s1"><span class="pl-c">     *</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span>  int  $id</span></span>
-<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Http\Response</span></span>
-<span class="pl-s1"><span class="pl-c">     */</span></span>
-<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">destroy</span>(<span class="pl-smi">$id</span>)</span>
-<span class="pl-s1">    {</span>
-<span class="pl-s1">        <span class="pl-c">//</span></span>
-<span class="pl-s1">    }</span>
 <span class="pl-s1">}</span></pre></div>
 
 <h4>
