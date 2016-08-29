@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>API Starter Package by ralphowino</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">API Starter Package</h1>
+      <h2 class="project-tagline">Allowing you to get stuff done just a little bit quicker</h2>
+      <a href="https://github.com/ralphowino/restful-api-helper" class="btn">View on GitHub</a>
+      <a href="https://github.com/ralphowino/restful-api-helper/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ralphowino/restful-api-helper/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="api-starter-package" class="anchor" href="#api-starter-package" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API STARTER PACKAGE</h1>
+
+<p><a href="https://travis-ci.org/ralphowino/restful-api-helper"><img src="https://travis-ci.org/ralphowino/restful-api-helper.svg?branch=master" alt="Build Status"></a></p>
+
+<p>This is a laravel package that helps you start of building a laravel API. It contains useful command generators to generate various files for your API and is completely configurable. The generators include:</p>
+
+<ul>
+<li><code>starter:init</code></li>
+<li><code>starter:model &lt;name&gt; --fillable[=FILLABLE] --migration --relationships[=RELATIONSHIPS] --repository  --schema[=SCHEMA] --soft-deletes --table[=TABLE] --transformer</code></li>
+<li><code>starter:migration &lt;name&gt; --schema[=SCHEMA] --soft-deletes --model[=MODEL]</code></li>
+<li>
+<code>starter:controller &lt;name&gt; --automate --except[=EXCEPT] --only[=ONLY] --plain --repository[=REPOSITORY] --resource --transformer[=TRANSFORMER]</code> </li>
+<li><code>starter:repository &lt;name&gt; --model</code></li>
+<li><code>starter:transformer &lt;name&gt; --fields[=FIELDS] --includes[=INCLUDES] --model[=MODEL]</code></li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="step-1-install-the-composer-packages" class="anchor" href="#step-1-install-the-composer-packages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 1: Install the composer packages</h3>
+
+<p>Add</p>
+
+<div class="highlight highlight-source-json"><pre>{
+   <span class="pl-s"><span class="pl-pds">"</span>minimum-stability<span class="pl-pds">"</span></span> : <span class="pl-s"><span class="pl-pds">"</span>dev<span class="pl-pds">"</span></span>,
+   <span class="pl-s"><span class="pl-pds">"</span>prefer-stable<span class="pl-pds">"</span></span> : <span class="pl-c1">true</span>
+}</pre></div>
+
+<p>to your composer.json file.</p>
+
+<p>Run in terminal</p>
+
+<pre><code>composer require ralphowino/restful-api-helper 1.0.x-dev.
+</code></pre>
+
+<h3>
+<a id="step-2-add-the-service-provider" class="anchor" href="#step-2-add-the-service-provider" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 2: Add the Service Provider</h3>
+
+<p>Add the service provider in <code>config/app.php</code>:  </p>
+
+<pre><code>Ralphowino\ApiStarter\ApiStarterServiceProvider::class
+</code></pre>
+
+<h3>
+<a id="step-3-publish-the-packages-configuration-files" class="anchor" href="#step-3-publish-the-packages-configuration-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 3: Publish the packages configuration files</h3>
+
+<p>Publish the package's assets by running </p>
+
+<pre><code>php artisan vendor:publish --provider="Ralphowino\ApiStarter\ApiStarterServiceProvider"
+</code></pre>
+
+<h3>
+<a id="step-4-initialize-the-package" class="anchor" href="#step-4-initialize-the-package" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 4: Initialize the package</h3>
+
+<p>Initialize the project by running </p>
+
+<pre><code>php artisan starter:init
+</code></pre>
+
+<p>Select directories to save the generated files in.</p>
+
+<p><em>NB: Just press enter for every question to retain the default.</em></p>
+
+<h3>
+<a id="step-5-generate-a-new-jwt-token" class="anchor" href="#step-5-generate-a-new-jwt-token" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Step 5: Generate a new jwt token</h3>
+
+<p>Generate a new jwt token for the application by running </p>
+
+<pre><code>php artisan jwt:generate
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="commands" class="anchor" href="#commands" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Commands</h3>
+
+<h4>
+<a id="1-starterinit" class="anchor" href="#1-starterinit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. starter:init</h4>
+
+<h5>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h5>
+
+<p>This command is used to setup the basic configurations for the package and import the starter files into your application.
+Guides you on setting up the basic structure for the application's folders and places to which to generate the files. It also sets up authentication for the API straight out of the box.</p>
+
+<h5>
+<a id="arguments" class="anchor" href="#arguments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<p><em>No arguments for this command</em></p>
+
+<h5>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<p><em>This command has no options for it's execution</em></p>
+
+<h4>
+<a id="2-startermodel" class="anchor" href="#2-startermodel" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. starter:model</h4>
+
+<h5>
+<a id="description-1" class="anchor" href="#description-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h5>
+
+<p>This command allows you to create a model for the API it will automatically extend the Base Model that comes with the package, this is however configurable from the starter.php config file and saves the model to the set out path in the starter.php config file.</p>
+
+<h5>
+<a id="arguments-1" class="anchor" href="#arguments-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<ul>
+<li>
+<code>name</code> - The name of the model class (<em>Preferred to be singular</em>)</li>
+</ul>
+
+<h5>
+<a id="options-1" class="anchor" href="#options-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<ul>
+<li>
+<code>--fillable</code> -  This option specifies the fillable fields for the model</li>
+<li>
+<code>--migration</code> - This option generates a migration along with the model being created</li>
+<li>
+<code>--relationships</code> - This option allows you to specify the relationships for the model</li>
+<li>
+<code>--repository</code> - This option allows you to specify and create an accompanying repository for the model</li>
+<li>
+<code>--schema</code> - This option sets the fields for the model and if a migration is to be created adds the fields to the migration, if no fillable fields have been define the fields are all added to the fillable array</li>
+<li>
+<code>--soft-deletes</code> - This option allows you to add soft delete functionality to the model being created</li>
+<li>
+<code>--table</code> - This option is used to explicitly set the table name for the model</li>
+<li>
+<code>--transformer</code> - This option allows you to specify and create an accompanying transformer for the model</li>
+</ul>
+
+<h5>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<pre><code>php artisan starter:model Task --schema="title:string, description:text" --fillable="title,description" --table="tasks" --relationships="user:belongsTo, subtask:hasMany" --soft-deletes
+</code></pre>
+
+<p>The appropriate format for the fillable fields is:</p>
+
+<p><code>FIELD,FIELD</code> </p>
+
+<p>The appropriate format for the relationships is:</p>
+
+<p><code>MODEL:RELATIONSHIP</code></p>
+
+<p>The appropriate format for the schema is:</p>
+
+<p><code>COLUMN_NAME:COLUMN_VALUE</code></p>
+
+<p>..the model created will be:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Data\Models</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Illuminate\Database\Eloquent\SoftDeletes</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\BaseModel</span>; </span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">Task</span> <span class="pl-k">extends</span> <span class="pl-e">BaseModel</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">SoftDeletes</span>;</span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * The model's table</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> string</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$table</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>tasks<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * This are the mass assignable fields for the model</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> array</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$fillable</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>description<span class="pl-pds">'</span></span>];</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Links to it's user</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Database\Eloquent\Relations\BelongsTo</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">     <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">user</span>()</span>
+<span class="pl-s1">     {</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>belongsTo(<span class="pl-c1">User</span><span class="pl-k">::</span><span class="pl-c1">class</span>);</span>
+<span class="pl-s1">     }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Links to it's subtask</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Database\Eloquent\Relations\HasMany</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">     <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">subtask</span>()</span>
+<span class="pl-s1">     {</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>hasMany(<span class="pl-c1">Subtask</span><span class="pl-k">::</span><span class="pl-c1">class</span>);</span>
+<span class="pl-s1">     }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<h4>
+<a id="3-startermigration" class="anchor" href="#3-startermigration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. starter:migration</h4>
+
+<p>This command creates a new migration for the application</p>
+
+<h5>
+<a id="arguments-2" class="anchor" href="#arguments-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<ul>
+<li>
+<code>name</code> -  The name of the migration</li>
+</ul>
+
+<h5>
+<a id="options-2" class="anchor" href="#options-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<ul>
+<li>
+<code>--model</code>   - This option creates a model along with the migration</li>
+<li>
+<code>--schema</code>  - This option adds the fields for the migration</li>
+<li>
+<code>--soft-deletes</code> - This option adds soft deletes to the migration</li>
+</ul>
+
+<h5>
+<a id="example-1" class="anchor" href="#example-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<pre><code>php artisan starter:migration create_tasks_table --schema="title:string, description:text" --soft-deletes
+</code></pre>
+
+<p>The schema format remains the same as that of the model command</p>
+
+<p>...the file generated with the command:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Illuminate\Database\Schema\Blueprint</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Illuminate\Database\Migrations\Migration</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">CreateTasksTable</span> <span class="pl-k">extends</span> <span class="pl-e">Migration</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Run the migrations.</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> void</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">up</span>()</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-c1">Schema</span><span class="pl-k">::</span>create(<span class="pl-s"><span class="pl-pds">'</span>tasks<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-c1">Blueprint</span> <span class="pl-smi">$table</span>) {</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>increments(<span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>string(<span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>text(<span class="pl-s"><span class="pl-pds">'</span>description<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>softDeletes();</span>
+<span class="pl-s1">            <span class="pl-smi">$table</span><span class="pl-k">-&gt;</span>timestamps();</span>
+<span class="pl-s1">        });</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Reverse the migrations.</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> void</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">down</span>()</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-c1">Schema</span><span class="pl-k">::</span>drop(<span class="pl-s"><span class="pl-pds">'</span>tasks<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<h4>
+<a id="4-startercontroller" class="anchor" href="#4-startercontroller" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. starter:controller</h4>
+
+<p>This command creates a controller for the application and extends the BaseController automatically and is saved in the specified folder in the config file although all this (Class to extend and place to save the controller) is fully configurable in the config file.</p>
+
+<h5>
+<a id="arguments-3" class="anchor" href="#arguments-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<ul>
+<li>
+<code>name</code> - The name of the controller</li>
+</ul>
+
+<h5>
+<a id="options-3" class="anchor" href="#options-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<ul>
+<li>
+<code>--automate</code> - This option creates all the described classes for the controller e.g. The accompanying repository and transformer</li>
+<li>
+<code>--except</code> - This option defines the methods to exclude from the controller's methods</li>
+<li>
+<code>--only</code> - This option describes the methods to have in the controller</li>
+<li>
+<code>--plain</code> - This option does not include the resourceful trait in the controller</li>
+<li>
+<code>--repository</code> - This defines the repository for the controller</li>
+<li>
+<code>--resource</code> - This option creates a controller with all the resourceful methods</li>
+<li>
+<code>--transformer</code> - This defines the transformer for the controller</li>
+</ul>
+
+<h5>
+<a id="example-2" class="anchor" href="#example-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<pre><code>php artisan starter:controller TasksController --only="index,show"
+</code></pre>
+
+<p>...the controller generated by the above command:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Http\Controllers\Api</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Dingo\Api\Http\Response</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Illuminate\Http\Request</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Repositories\TasksRepository</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Transformers\TasksTransformer</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Requests</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\BaseController</span>; </span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TasksController</span> <span class="pl-k">extends</span> <span class="pl-e">BaseController</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * The repository variable</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> TasksRepository</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$repository</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * The transformer variable</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> TasksTransformer</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$transformer</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * The constructor for the controller</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> TasksRepository $tasksRepository</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> TasksTransformer $tasksTransformer</span></span>
+<span class="pl-s1"><span class="pl-c">     * TasksTransformer are used to convert model to json, with fields we would like to show.</span></span>
+<span class="pl-s1"><span class="pl-c">     * TasksRepository contains all logic used to manipulate the database you can override this with</span></span>
+<span class="pl-s1"><span class="pl-c">     * repository class you wish to have.</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-c1">__construct</span>(<span class="pl-c1">TasksRepository</span> <span class="pl-smi">$tasksRepository</span>, <span class="pl-c1">TasksTransformer</span> <span class="pl-smi">$tasksTransformer</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">repository</span> <span class="pl-k">=</span> <span class="pl-smi">$tasksRepository</span>;</span>
+<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">transformer</span> <span class="pl-k">=</span> <span class="pl-smi">$tasksTransformer</span>;</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Display a listing of the resource.</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Request $request</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Http\Response</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">index</span>(<span class="pl-c1">Request</span> <span class="pl-smi">$request</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$archived</span> <span class="pl-k">=</span> <span class="pl-smi">$request</span><span class="pl-k">-&gt;</span>input(<span class="pl-s"><span class="pl-pds">'</span>archived<span class="pl-pds">'</span></span>, <span class="pl-c1">false</span>);</span>
+<span class="pl-s1">        <span class="pl-smi">$collection</span> <span class="pl-k">=</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">repository</span><span class="pl-k">-&gt;</span>getPaginated(<span class="pl-smi">$request</span><span class="pl-k">-&gt;</span>get(<span class="pl-s"><span class="pl-pds">'</span>per_page<span class="pl-pds">'</span></span>, <span class="pl-c1">10</span>), <span class="pl-smi">$archived</span>);</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>response()<span class="pl-k">-&gt;</span>paginator(<span class="pl-smi">$collection</span>, <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">transformer</span>);</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Display the specified resource.</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span>  int  $id</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \Illuminate\Http\Response</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">show</span>(<span class="pl-smi">$id</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$item</span> <span class="pl-k">=</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">repository</span><span class="pl-k">-&gt;</span>getByKey(<span class="pl-smi">$id</span>);</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>response()<span class="pl-k">-&gt;</span>item(<span class="pl-smi">$item</span>, <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">transformer</span>);</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1">}</span></pre></div>
+
+<h4>
+<a id="5-starterrepository" class="anchor" href="#5-starterrepository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. starter:repository</h4>
+
+<p>This command creates a repository for the application in the configured path in the configuration file.</p>
+
+<h5>
+<a id="arguments-4" class="anchor" href="#arguments-4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<ul>
+<li>
+<code>name</code> - The name of the model</li>
+</ul>
+
+<h5>
+<a id="options-4" class="anchor" href="#options-4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<ul>
+<li>
+<code>--model</code> - This option creates the model linked to the repository as it creates the repository</li>
+</ul>
+
+<h5>
+<a id="example-3" class="anchor" href="#example-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<pre><code>php artisan starter:repository TaskRepository
+</code></pre>
+
+<p>...the repository generated is:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Data\Repositories</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Models\Task</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\ResourcefulRepositoryTrait</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\BaseRepository</span>; </span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TaskRepository</span> <span class="pl-k">extends</span> <span class="pl-e">BaseRepository</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">ResourcefulRepositoryTrait</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * This is the repository's model</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> Task</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$model</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * TaskRepository constructor</span></span>
+<span class="pl-s1"><span class="pl-c"><span class="pl-ii"></span></span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">function</span> <span class="pl-c1">__construct</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span><span class="pl-smi">model</span> <span class="pl-k">=</span> <span class="pl-smi">$task</span>;</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<h4>
+<a id="6-startertransformer" class="anchor" href="#6-startertransformer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. starter:transformer</h4>
+
+<p>This command creates a transformer for the application, the transformer is saved in the specified path in the configuration file.</p>
+
+<h5>
+<a id="arguments-5" class="anchor" href="#arguments-5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<ul>
+<li>
+<code>name</code> - The name of the model linked to the transformer</li>
+</ul>
+
+<h5>
+<a id="options-5" class="anchor" href="#options-5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<ul>
+<li>
+<code>--fields</code> - The fields to be included in the transformer</li>
+<li>
+<code>--includes</code> - This are the includes for the transformer</li>
+<li>
+<code>--model</code> - This option the defines the model for the transformer</li>
+</ul>
+
+<h5>
+<a id="example-4" class="anchor" href="#example-4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<pre><code>php artisan starter:transformer TaskTransformer --fields="name,slug" --includes="user:item, comments:collection, goal, elements"
+</code></pre>
+
+<p>For the fields format a comma seperated list is expected</p>
+
+<p><code>name,user,time</code></p>
+
+<p>For the includes the following format should be used</p>
+
+<p><code>INCLUDE_NAME:INCLUDE_TYPE</code></p>
+
+<p>if you do not include the <code>INCLUDE_TYPE</code> the generator will try to determine if the word is plural or singular and change the type according with that</p>
+
+<p>...transformer generated by the command is:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Data\Transformers</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Models\Task</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">League\Fractal\TransformerAbstract</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TaskTransformer</span> <span class="pl-k">extends</span> <span class="pl-e">TransformerAbstract</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * List of resources possible to include</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> array</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$availableIncludes</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>comments<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>goal<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>elements<span class="pl-pds">'</span></span>];</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Turn this item object into a generic array</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> array</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">transform</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-k">return</span> [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">id</span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">name</span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>slug<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">slug</span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>created_at<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> (<span class="pl-k">String</span>)<span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">created_at</span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> (<span class="pl-k">String</span>)<span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">updated_at</span></span>
+<span class="pl-s1">        ];</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Include User</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \League\Fractal\Resource\item</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">includeUser</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$user</span> <span class="pl-k">=</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">user</span>;</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>item(<span class="pl-smi">$user</span>, <span class="pl-k">new</span> <span class="pl-c1">UserTransformer</span>());</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Include Comments</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \League\Fractal\Resource\collection</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">includeComments</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$comments</span> <span class="pl-k">=</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">comments</span>;</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>collection(<span class="pl-smi">$comments</span>, <span class="pl-k">new</span> <span class="pl-c1">CommentTransformer</span>());</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Include Goal</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \League\Fractal\Resource\item</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">includeGoal</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$goal</span> <span class="pl-k">=</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">goal</span>;</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>item(<span class="pl-smi">$goal</span>, <span class="pl-k">new</span> <span class="pl-c1">GoalTransformer</span>());</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/**</span></span>
+<span class="pl-s1"><span class="pl-c">     * Include Elements</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
+<span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \League\Fractal\Resource\collection</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">includeElements</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$elements</span> <span class="pl-k">=</span> <span class="pl-smi">$task</span><span class="pl-k">-&gt;</span><span class="pl-smi">elements</span>;</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>collection(<span class="pl-smi">$elements</span>, <span class="pl-k">new</span> <span class="pl-c1">ElementTransformer</span>());</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<h4>
+<a id="6-starterresource" class="anchor" href="#6-starterresource" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. starter:resource</h4>
+
+<p>This command creates for you a resource; this contains a model, migration, repository, transformer, controller; for you application from the single resource name, you however have various options of modifying what will be generated.</p>
+
+<h5>
+<a id="arguments-6" class="anchor" href="#arguments-6" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arguments</h5>
+
+<ul>
+<li>
+<code>name</code> - The name of the resource</li>
+</ul>
+
+<h5>
+<a id="options-6" class="anchor" href="#options-6" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options</h5>
+
+<ul>
+<li>
+<code>--controller</code> - This option allows you to define the controller for the resource</li>
+<li>
+<code>--except</code> - This option allows you to define the methods to except from the generated controller</li>
+<li>
+<code>--fields</code> - This option allows you to define the fields for the transformer</li>
+<li>
+<code>--includes</code> - This option allows you to define the models to include in the resource's transformer</li>
+<li>
+<code>--model</code> - This option the defines the model for the transformer</li>
+<li>
+<code>--only</code> - This option allows you to define the methods for the generated controller</li>
+<li>
+<code>--relationships</code> - This option allows you to define the relationships for the resource's model</li>
+<li>
+<code>--repository</code> - This option allows you to define the repository for the resource</li>
+<li>
+<code>--schema</code> - This option enables you to specify the schema for the resource</li>
+<li>
+<code>--soft-deletes</code> - This option adds soft-delete to the resource</li>
+<li>
+<code>--table</code> - This option allows you to define the table's name for this resource</li>
+<li>
+<code>--transformer</code> - This option allows you to define the transformer for the resource</li>
+</ul>
+
+<p>This command is used to do each of the other commands as unit; which in this case is termed as a 'resource'; so the output is the same as the other commands individually. It is just to let you generate a resource in one quick sweep. :-)</p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>You can configure the destinations of the files generated by configuring the paths to the various files in the <code>config/starter.php</code> configuration file</p>
+
+<p>...the default config file </p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">return</span> [</span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The migration configuration settings.</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Path - path to where the created migrations are stored</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>migration<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>database<span class="pl-cce">\\</span>migrations<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The model configuration settings</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Path - path the models will be saved in.</span></span>
+<span class="pl-s1"><span class="pl-c">     * 2. Extends -  The class all the created models will extend.</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>model<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Data<span class="pl-cce">\\</span>Models<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>extends<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Ralphowino<span class="pl-cce">\\</span>ApiStarter<span class="pl-cce">\\</span>Resources<span class="pl-cce">\\</span>BaseModel<span class="pl-pds">'</span></span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The controller configuration settings</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Path - path the controllers will be saved in.</span></span>
+<span class="pl-s1"><span class="pl-c">     * 2. Extends - The class the created controller extends</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>controller<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Http<span class="pl-cce">\\</span>Controllers<span class="pl-cce">\\</span>Api<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>extends<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Ralphowino<span class="pl-cce">\\</span>ApiStarter<span class="pl-cce">\\</span>Resources<span class="pl-cce">\\</span>BaseController<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The repository configuration settings</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Traits configuration settings</span></span>
+<span class="pl-s1"><span class="pl-c">     *     1.1. Path - the path the repository traits will be saved in.</span></span>
+<span class="pl-s1"><span class="pl-c">     * 2. Path - the path created repositories will be saved in.</span></span>
+<span class="pl-s1"><span class="pl-c">     * 3. Extends - the class all created repositories will extend.</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>repository<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>trait<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Data<span class="pl-cce">\\</span>Repositories<span class="pl-cce">\\</span>Traits<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ],</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Data<span class="pl-cce">\\</span>Repositories<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>extends<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Ralphowino<span class="pl-cce">\\</span>ApiStarter<span class="pl-cce">\\</span>Resources<span class="pl-cce">\\</span>BaseRepository<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The transformer configuration settings</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Path - the path the created transformers will be saved in.</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>transformer<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Http<span class="pl-cce">\\</span>Transformers<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The routes configuration settings</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Path - the path the routes file is located.</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>routes<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Http<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">/*</span></span>
+<span class="pl-s1"><span class="pl-c">     * The default classes for the application</span></span>
+<span class="pl-s1"><span class="pl-c">     *</span></span>
+<span class="pl-s1"><span class="pl-c">     * 1. Repository - the default repository for the controllers</span></span>
+<span class="pl-s1"><span class="pl-c">     */</span></span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>default<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>repository<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>UsersRepository<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>transformer<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>UsersTransformer<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ]</span>
+<span class="pl-s1">];</span></pre></div>
+
+<p>Star our repository if this if you like this package. Share you views on the package to help us improve on it. </p>
+
+<blockquote>
+<p>Written with <a href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ralphowino/restful-api-helper">API Starter Package</a> is maintained by <a href="https://github.com/ralphowino">ralphowino</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
