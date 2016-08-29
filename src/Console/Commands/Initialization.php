@@ -3,10 +3,10 @@
 namespace Ralphowino\ApiStarter\Console\Commands;
 
 use Illuminate\Console\Command;
-use Ralphowino\ApiStarter\Console\Initialization\Configurer;
 use Ralphowino\ApiStarter\Console\Traits\FileWizard;
 use Ralphowino\ApiStarter\Console\Traits\BuildClassTrait;
 use Ralphowino\ApiStarter\Console\Traits\ProcessRunnerTrait;
+use Ralphowino\ApiStarter\Console\Initialization\Configurer;
 
 class Initialization extends Command
 {
@@ -59,9 +59,6 @@ class Initialization extends Command
         $this->info('Copying all the necessary starter files...');
         $this->publishAllFiles();
 
-        //Copy the BaseController content to existing Controller
-        $this->addToBaseController();
-
         //Append the routes to the routes.php file
         $this->info('Adding the routes to the routes file...');
         $this->addRoutes();
@@ -94,21 +91,9 @@ class Initialization extends Command
         $this->publishes([
             $this->package_path('Controllers') => app_path(config('starter.controller.path')),
             $this->package_path('Data/Models') => app_path(config('starter.model.path')),
-            $this->package_path('Data/Repositories') => app_path(config('starter.repository.path')),
             $this->package_path('Templates/init-middleware.php') => app_path('Http/Kernel.php'),
             $this->package_path('config/view.php') => base_path('config/view.php'),
         ]);
-    }
-
-    /**
-     * Add the BaseController content
-     *
-     * @return void
-     */
-    public function addToBaseController()
-    {
-        $content = \File::get($this->package_path('Templates/base-controller.php'));
-        $this->writeToBottomOfClass(app_path('Http/Controllers/Controller.php'), $content);
     }
 
     /**

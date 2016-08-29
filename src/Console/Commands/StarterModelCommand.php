@@ -314,7 +314,7 @@ class StarterModelCommand extends GeneratorCommand
             ['schema', null, InputOption::VALUE_OPTIONAL, 'Define the fields of the model'],
             ['soft-deletes', 'a', InputOption::VALUE_NONE, 'Adds soft delete to the model'],
             ['table', null, InputOption::VALUE_OPTIONAL, 'Assigns the model a table'],
-            ['transformer', 't', InputOption::VALUE_NONE, 'Define the model\'s transformer'],
+            ['transformer', 't', InputOption::VALUE_NONE, 'Define the model\'s transformer']
         ];
     }
 }

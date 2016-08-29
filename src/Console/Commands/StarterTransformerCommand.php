@@ -65,7 +65,7 @@ class StarterTransformerCommand extends GeneratorCommand
      */
     protected function getModelInput()
     {
-        if($this->option('model') !== '0') {
+        if($this->option('model')) {
             return trim($this->option('model'));
         }
 
@@ -106,7 +106,7 @@ class StarterTransformerCommand extends GeneratorCommand
     public function fire()
     {
         if (parent::fire() !== false) {
-            if ($this->option('model') && !$this->files->exists($this->getClassPath($this->getModelInput()))) {
+            if (!$this->files->exists($this->getClassPath($this->getModelInput()))) {
                 $this->call('starter:model', ['name' => $this->getModelInput()]);
             }
         }

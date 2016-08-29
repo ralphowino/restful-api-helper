@@ -152,6 +152,16 @@ class StarterResourceCommand extends GeneratorCommand
     }
 
     /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        // TODO: Implement getStub() method.
+    }
+
+    /**
      * Get the relationships input
      *
      * @return array|string
@@ -305,12 +315,12 @@ class StarterResourceCommand extends GeneratorCommand
     {
         return array(
             array('controller', null, InputOption::VALUE_OPTIONAL, 'Link to a specific controller'),
+            array('except', null, InputOption::VALUE_OPTIONAL, 'Define controller methods not to create'),
             array('fields', null, InputOption::VALUE_OPTIONAL, 'Define the fields that the transformer will provide'),
             array('includes', null, InputOption::VALUE_OPTIONAL, 'Define the transformer\'s includes'),
             array('model', null, InputOption::VALUE_OPTIONAL, 'Link to a specific model'),
-            array('only', null, InputOption::VALUE_OPTIONAL, 'Define controller methods to create'),
-            array('except', null, InputOption::VALUE_OPTIONAL, 'Define controller methods not to create'),
             array('model', null, InputOption::VALUE_OPTIONAL, 'Link to a specific model'),
+            array('only', null, InputOption::VALUE_OPTIONAL, 'Define controller methods to create'),
             array('relationships', null, InputOption::VALUE_OPTIONAL, 'This are the relationships for the resource'),
             array('repository', null, InputOption::VALUE_OPTIONAL, 'Link to a specific repository'),
             array('schema', null, InputOption::VALUE_OPTIONAL, 'This is the schema for the resource'),
@@ -318,15 +328,5 @@ class StarterResourceCommand extends GeneratorCommand
             array('table', null, InputOption::VALUE_OPTIONAL, 'Define the resource\'s table'),
             array('transformer', null, InputOption::VALUE_OPTIONAL, 'Link to a specific transformer'),
         );
-    }
-
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        // TODO: Implement getStub() method.
     }
 }

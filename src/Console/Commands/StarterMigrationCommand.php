@@ -240,8 +240,8 @@ class StarterMigrationCommand extends Command
     protected function getOptions()
     {
         return [
+            ['model', null, InputOption::VALUE_OPTIONAL, 'Define the model for the migration', false],
             ['schema', 's', InputOption::VALUE_OPTIONAL, 'Optional schema to be attached to the migration', null],
-            ['model', null, InputOption::VALUE_OPTIONAL, 'Want a model for this table?', false],
             ['soft-deletes', null, InputOption::VALUE_NONE, 'Adds soft-delete to the created migration'],
         ];
     }

@@ -54,6 +54,11 @@ class ApiStarterServiceProvider extends ServiceProvider
         $this->registerHelpers();
     }
 
+    /**
+     * Register the package's helper methods
+     *
+     * @return void
+     */
     public function registerHelpers()
     {
         require_once __DIR__ . '/helpers.php';

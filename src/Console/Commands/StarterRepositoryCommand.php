@@ -71,7 +71,7 @@ class StarterRepositoryCommand extends GeneratorCommand
      */
     protected function getModelInput()
     {
-        if($this->option('model') != 'automate') {
+        if($this->option('model')) {
             return trim($this->option('model'));
         }
 
@@ -81,7 +81,7 @@ class StarterRepositoryCommand extends GeneratorCommand
             return studly_case(strtolower(trim($matches[1])));
         }
 
-        return studly_case(strtolower(trim($name)));
+        return str_singular(studly_case(strtolower(trim($name))));
     }
 
     /**
@@ -102,7 +102,7 @@ class StarterRepositoryCommand extends GeneratorCommand
     public function fire()
     {
         if (parent::fire() !== false) {
-            if ($this->option('model') && !$this->files->exists($this->getClassPath($this->getModelInput()))) {
+            if (!$this->files->exists($this->getClassPath($this->getModelInput()))) {
                 $this->call('starter:model', ['name' =>$this->getModelInput()]);
             }
         }
@@ -215,7 +215,7 @@ class StarterRepositoryCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Want a model for this repository?', 'automate']
+            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Define the model for the repository']
         ];
     }
 }

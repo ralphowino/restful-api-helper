@@ -396,13 +396,13 @@ class StarterControllerCommand extends GeneratorCommand
     protected function getOptions()
     {
         return array(
-            array('plain', '-p', InputOption::VALUE_NONE, 'Create a plain controller'),
-            array('resource', '-r', InputOption::VALUE_NONE, 'Create controller with the resourceful methods'),
             array('automate', '-a', InputOption::VALUE_NONE, 'Create all the classes necessary automatically'),
-            array('repository', null, InputOption::VALUE_OPTIONAL, "Assign the controller the repository"),
-            array('transformer', null, InputOption::VALUE_OPTIONAL, "Assign the controller the transformer"),
-            array('only', null, InputOption::VALUE_OPTIONAL, 'Create controller with only this methods'),
-            array('except', null, InputOption::VALUE_OPTIONAL, 'Create controller without this methods')
+            array('except', null, InputOption::VALUE_OPTIONAL, 'Define what methods to exclude from controller'),
+            array('only', null, InputOption::VALUE_OPTIONAL, 'Define the controller\'s methods'),
+            array('plain', '-p', InputOption::VALUE_NONE, 'Include no methods to the generated controller'),
+            array('repository', null, InputOption::VALUE_OPTIONAL, "Assign the controller a repository"),
+            array('resource', '-r', InputOption::VALUE_NONE, 'Include all the resourceful methods to the controller'),
+            array('transformer', null, InputOption::VALUE_OPTIONAL, "Assign the controller a transformer"),
         );
     }
 }
