@@ -93,7 +93,7 @@
 </code></pre>
 
 <h2>
-<a id="installation-1" class="anchor" href="#installation-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
 
 <h3>
 <a id="commands" class="anchor" href="#commands" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Commands</h3>
@@ -338,11 +338,11 @@ Guides you on setting up the basic structure for the application's folders and p
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Illuminate\Http\Request</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Repositories\TasksRepository</span>;</span>
-<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Transformers\TasksTransformer</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Transformers\TasksTransformer</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Requests</span>;</span>
-<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Http\Controllers\Controller</span>; </span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\BaseController</span>; </span>
 <span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TasksController</span> <span class="pl-k">extends</span> <span class="pl-e">Controller</span></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TasksController</span> <span class="pl-k">extends</span> <span class="pl-e">BaseController</span></span>
 <span class="pl-s1">{</span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
 <span class="pl-s1"><span class="pl-c">     * The repository variable</span></span>
@@ -426,7 +426,7 @@ Guides you on setting up the basic structure for the application's folders and p
 <h5>
 <a id="example-3" class="anchor" href="#example-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
 
-<pre><code>php artisan starter:repository Task
+<pre><code>php artisan starter:repository TaskRepository
 </code></pre>
 
 <p>...the repository generated is:</p>
@@ -436,11 +436,12 @@ Guides you on setting up the basic structure for the application's folders and p
 <span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Data\Repositories</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Models\Task</span>;</span>
-<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Repositories\Traits\ResourcefulTrait</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\ResourcefulRepositoryTrait</span>;</span>
+<span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">Ralphowino\ApiStarter\Resources\BaseRepository</span>; </span>
 <span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TasksRepository</span> <span class="pl-k">extends</span> <span class="pl-e">BaseRepository</span></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">TaskRepository</span> <span class="pl-k">extends</span> <span class="pl-e">BaseRepository</span></span>
 <span class="pl-s1">{</span>
-<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">ResourcefulTrait</span>;</span>
+<span class="pl-s1">    <span class="pl-k">use</span> <span class="pl-c1">ResourcefulRepositoryTrait</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
 <span class="pl-s1"><span class="pl-c">     * This is the repository's model</span></span>
@@ -450,7 +451,8 @@ Guides you on setting up the basic structure for the application's folders and p
 <span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$model</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
-<span class="pl-s1"><span class="pl-c">     * TasksRepository constructor.</span></span>
+<span class="pl-s1"><span class="pl-c">     * TaskRepository constructor</span></span>
+<span class="pl-s1"><span class="pl-c"><span class="pl-ii"></span></span></span>
 <span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
 <span class="pl-s1"><span class="pl-c">     */</span></span>
 <span class="pl-s1">    <span class="pl-k">function</span> <span class="pl-c1">__construct</span>(<span class="pl-c1">Task</span> <span class="pl-smi">$task</span>)</span>
@@ -480,12 +482,14 @@ Guides you on setting up the basic structure for the application's folders and p
 <code>--fields</code> - The fields to be included in the transformer</li>
 <li>
 <code>--includes</code> - This are the includes for the transformer</li>
+<li>
+<code>--model</code> - This option the defines the model for the transformer</li>
 </ul>
 
 <h5>
-<a id="exampl" class="anchor" href="#exampl" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Exampl</h5>
+<a id="example-4" class="anchor" href="#example-4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
 
-<pre><code>php artisan starter:transformer Task --fields="name,slug" --includes="user:item, comments:collection, goal, elements"
+<pre><code>php artisan starter:transformer TaskTransformer --fields="name,slug" --includes="user:item, comments:collection, goal, elements"
 </code></pre>
 
 <p>For the fields format a comma seperated list is expected</p>
@@ -502,7 +506,7 @@ Guides you on setting up the basic structure for the application's folders and p
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
 <span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Http\Transformers</span>;</span>
+<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Data\Transformers</span>;</span>
 <span class="pl-s1"></span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">App\Data\Models\Task</span>;</span>
 <span class="pl-s1"><span class="pl-k">use</span> <span class="pl-c1">League\Fractal\TransformerAbstract</span>;</span>
@@ -514,8 +518,7 @@ Guides you on setting up the basic structure for the application's folders and p
 <span class="pl-s1"><span class="pl-c">     *</span></span>
 <span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@var</span> array</span></span>
 <span class="pl-s1"><span class="pl-c">     */</span></span>
-<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$availableIncludes</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>comments<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>goal<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>elements</span></span>
-<span class="pl-s1"><span class="pl-s"><span class="pl-pds">'</span></span>];</span>
+<span class="pl-s1">    <span class="pl-k">protected</span> <span class="pl-smi">$availableIncludes</span> <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">'</span>user<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>comments<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>goal<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>elements<span class="pl-pds">'</span></span>];</span>
 <span class="pl-s1"></span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
 <span class="pl-s1"><span class="pl-c">     * Turn this item object into a generic array</span></span>
@@ -572,7 +575,6 @@ Guides you on setting up the basic structure for the application's folders and p
 <span class="pl-s1"></span>
 <span class="pl-s1">    <span class="pl-c">/**</span></span>
 <span class="pl-s1"><span class="pl-c">     * Include Elements</span></span>
-<span class="pl-s1"><span class="pl-c"><span class="pl-ii"></span></span></span>
 <span class="pl-s1"><span class="pl-c">     *</span></span>
 <span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@param</span> Task $task</span></span>
 <span class="pl-s1"><span class="pl-c">     * <span class="pl-k">@return</span> \League\Fractal\Resource\collection</span></span>
