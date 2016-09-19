@@ -18,8 +18,7 @@ return [
      */
     'model' => [
         'path' => 'Data\\Models',
-        'extends' => 'Ralphowino\\ApiStarter\\Resources\\BaseModel'
-
+        'extends' => 'Illuminate\\Database\\Eloquent\\Model'
     ],
 
     /*
