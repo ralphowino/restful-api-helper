@@ -295,7 +295,6 @@ class StarterModelCommand extends GeneratorCommand
             'DummyRelationships', $builtRelationships, $stub
         );
 
-
         return $this;
     }
 

@@ -69,12 +69,14 @@ class RelationsParser
 
             $name = array_shift($segments);
             $relation = array_shift($segments);
+            $method = (empty($segments)) ? camel_case($name) : array_shift($segments);
         } else {
             $name = $relationship;
             $relation = $this->determineRelationshipType($name);
+            $method = camel_case($name);
         }
 
-        return compact('name', 'relation');
+        return compact('name', 'relation', 'method');
     }
 
     /**

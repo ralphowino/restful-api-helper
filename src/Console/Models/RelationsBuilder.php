@@ -25,7 +25,7 @@ class RelationsBuilder
     private function createRelationshipsMethods($relations)
     {
         $relationMethods = array_map(function($relation) {
-            return $this->constructMethod($relation['name'], $relation['relation']);
+            return $this->constructMethod($relation['name'], $relation['relation'], $relation['method']);
         }, $relations);
 
 
@@ -37,13 +37,14 @@ class RelationsBuilder
      *
      * @param $name
      * @param $relation
+     * @param $method
      * @return string
      */
-    private function constructMethod($name, $relation)
+    private function constructMethod($name, $relation, $method)
     {
         $stub = file_get_contents(file_exists('./templates/partials/relationshipMethod.stub') ? './templates/partials/relationshipMethod.stub' : __DIR__ . '/../stubs/partials/relationshipMethod.stub');
 
-        return $this->addArguments($stub, $name, $relation)->addRelationship($stub, $relation)->addMethodName($stub, $name);
+        return $this->addArguments($stub, $name, $relation)->addRelationship($stub, $relation)->addMethodName($stub, $method);
     }
 
     /**
@@ -87,13 +88,13 @@ class RelationsBuilder
      * Add the name of the method
      *
      * @param $stub
-     * @param $name
+     * @param $method
      * @return mixed
      */
-    protected function addMethodName(&$stub, $name)
+    protected function addMethodName(&$stub, $method)
     {
         $stub = str_replace(
-            'DummyMethod', camel_case($name), $stub
+            'DummyMethod', camel_case($method), $stub
         );
 
         return $stub;
