@@ -17,7 +17,8 @@ trait GeneratorCommandTrait
         $basePath = config('starter.' . $type . '.extends');
 
         //Get the class credentials
-        $baseClass = basename($basePath);
+        $base = new \ReflectionClass($basePath);
+        $baseClass = $base->getShortName();
         $baseClassImport = dirname($basePath);
 
         //Check if we need to explicitly import the BaseClass
