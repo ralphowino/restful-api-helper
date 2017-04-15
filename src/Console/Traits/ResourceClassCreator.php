@@ -2,11 +2,11 @@
 
 namespace Ralphowino\ApiStarter\Console\Traits;
 
-use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Console\DetectsApplicationNamespace;
 
 trait ResourceClassCreator
 {
-    use AppNamespaceDetectorTrait;
+    use DetectsApplicationNamespace;
     /**
      * Return the path to the specified type of class
      *
